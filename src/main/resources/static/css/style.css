@@ -1,0 +1,107 @@
+/** {*/
+    /*margin:0px;*/
+    /*padding:0px;*/
+/*}*/
+
+.year {
+    color: black;
+}
+.title {
+    color: black;
+    font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
+    font-size: large;
+}
+
+.movie-details {
+    margin: 10px;
+    padding: 10px;
+}
+
+.movieTitle{
+    text-align: center;
+}
+
+.movie-link{
+    color: black
+}
+
+.movie-list-year{
+    position: absolute;
+    right: 2px;
+    top: 0px;
+}
+.movieInfo{
+    margin-left: 10px;
+    /*position: relative;*/
+    /*float: right;*/
+    /*width: 100%;*/
+}
+
+.info-and-img-div{
+    display: flex;
+    /*align-items: center;*/
+    /*justify-content: space-between;*/
+    padding: 20px 0;
+    position: relative;
+}
+
+.inline-div{
+    display: inline-block;
+}
+
+.list-group-item{
+    background: lightgrey;
+}
+.copyright {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 30px;
+    background: rgba(3,3,7,0.77);
+    width: 100%;
+}
+copyright-text {
+    color: blueviolet;
+}
+
+.categories-elem-inline {
+    display: inline-block;
+}
+
+.top-line-div{
+    flex: auto;
+    position: relative;
+}
+
+body{
+    background: lightgrey;
+    margin-bottom: 50px;
+
+}
+.list-group{
+    width:50%;
+}
+
+.mb-1 {
+    position: absolute;
+    left: 10px;
+}
+
+.movie-list-director {
+    position: absolute;
+    left: 10px;
+    bottom: 4px;
+}
+
+
+.list-img{
+    top: 0;
+    left: 0;
+    height: 5em;
+    width: 4em;
+    padding: 5px;
+}
+
+.dropdown-menu{
+    background: lightgrey;
+}

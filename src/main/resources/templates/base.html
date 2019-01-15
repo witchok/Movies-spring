@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <div th:fragment="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" th:href="@{/}">Movies</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Ratings
+                        </a>
+                        <div id="dropdown-nav" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">IMDB</a>
+                            <a class="dropdown-item" href="#">Tomato</a>
+                            <a class="dropdown-item" href="#">MetaCritic</a>
+                            <!--<div class="dropdown-divider"></div>-->
+                            <!--<a class="dropdown-item" href="#">Something else here</a>-->
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0" th:action="@{/movies/searchMovie}">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" th:name="reg">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+
+    <div>Content goes here</div>
+
+    <div th:fragment="copy" >
+        <span class="copyright-text">Copyright &copy; Chuck Norris</span>
+    </div>
+    <!--<div th:fragment="scripts">-->
+       <!--<script th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.js}"/>-->
+       <!--<script th:href="@{/webjars/jquery/3.3.1-1/jquery.min.js}"/>-->
+    <!--</div>-->
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

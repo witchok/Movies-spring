@@ -1,0 +1,91 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movies</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="http://cdn.jsdelivr.net/webjars/bootstrap/4.1.3/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}">
+    <link rel="stylesheet"
+          type="text/css"
+          th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <div id="header" th:include="base :: header"></div>
+    <div class="movie-details">
+        <h2 th:text="${movie.title}" class="movieTitle">Title</h2>
+        <div class="info-and-img-div">
+            <div class="inline-div">
+                <img th:src="${movie.posterUrl}"/>
+            </div>
+            <div class="inline-div movieInfo">
+                <span>Year: </span><span th:text="${movie.year}">year</span><br/>
+                <span>Rated: </span></span> <span th:text="${movie.rated}">rated</span><br/>
+                <span>Runtime: </span> <span th:text="${movie.runtime}">runtime</span><br/>
+
+                <div>
+                    <span>Countries: </span>
+                    <div th:each="country, iter : ${movie.countries}" class="inline-div">
+                        <a th:href="@{'/movies/sameCountry/'+${country}}">
+                            <span th:text="${country}" class="categories-elem-inline " ></span>
+                        </a>
+                        <span th:if="${iter.index != (#lists.size(movie.countries)-1)}" >, </span>
+                    </div>
+                </div>
+                <div>
+                    <span>Genres: </span>
+                    <div th:each="genre,iter : ${movie.genres}" class="inline-div">
+                        <a th:href="@{'/movies/sameGenre/'+${genre}}">
+                            <span th:text="${genre}" class="categories-elem-inline " ></span>
+                        </a>
+                        <span th:if="${iter.index != (#lists.size(movie.genres)-1)}" >, </span>
+                    </div>
+                </div>
+                <div>
+                    <span>Director: </span>
+                    <a th:href="@{'/movies/sameDirector/'+${movie.director}}">
+                        <span th:text="${movie.director}"></span>
+                    </a>
+                </div>
+                <div>
+                    <span>Writers: </span>
+                    <div th:each="writer,iter : ${movie.writers}" class="inline-div">
+                        <a th:href="@{'/movies/sameWriter/'+${writer}}">
+                            <span th:text="${writer}" class="categories-elem-inline " ></span>
+                        </a>
+                        <span th:if="${iter.index != (#lists.size(movie.writers)-1)}" >, </span>
+                    </div>
+                </div>
+                <div>
+                    <span>Actors: </span>
+                    <div th:each="actor,iter : ${movie.actors}" class="inline-div">
+                        <a th:href="@{'/movies/sameActor/'+${actor}}">
+                            <span th:text="${actor}" class="categories-elem-inline " ></span>
+                        </a>
+                        <span th:if="${iter.index != (#lists.size(movie.actors)-1)}" >, </span>
+                    </div>
+                </div>
+                <div>
+                    <span>Metacritic: </span> <span th:text="${movie.metacritic}"></span>
+                </div>
+                <div th:if="${movie.imdb}">
+                    <span>IMDB: </span> <span th:text="${movie.imdb.rating}"></span>
+                </div>
+                <div th:if="${movie.tomato}">
+                    <span>Tomato meter: </span> <span th:text="${movie.tomato.meter+'%'}"></span>
+                </div>
+            </div>
+        </div>
+        <h1>Plot</h1>
+        <span th:text="${movie.plot}"></span><br/>
+
+    </div>
+    <div th:include="base :: copy" class="copyright"></div>
+
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+</body>
+</html>

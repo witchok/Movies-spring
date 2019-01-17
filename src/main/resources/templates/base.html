@@ -15,15 +15,15 @@
                     <li class="nav-item active">
                         <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">Link</a>
-                    </li>
+                    <!--<li class="nav-item">-->
+                        <!--<a class="nav-link" th:href="@{/}">Link</a>-->
+                    <!--</li>-->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Ratings
                         </a>
                         <div id="dropdown-nav" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">IMDB</a>
+                            <a class="dropdown-item" th:href="@{/movies/rating/IMDB}">IMDB</a>
                             <a class="dropdown-item" href="#">Tomato</a>
                             <a class="dropdown-item" href="#">MetaCritic</a>
                             <!--<div class="dropdown-divider"></div>-->
@@ -31,7 +31,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
+                        <a class="nav-link disabled" th:href="@{/movies/rating/IMDB}">Disabled</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0" th:action="@{/movies/searchMovie}">

@@ -7,8 +7,12 @@ import com.lordofthejars.nosqlunit.annotation.ShouldMatchDataSet;
 import com.lordofthejars.nosqlunit.annotation.UsingDataSet;
 import com.lordofthejars.nosqlunit.core.LoadStrategyEnum;
 import com.lordofthejars.nosqlunit.mongodb.InMemoryMongoDb;
+import com.lordofthejars.nosqlunit.mongodb.MongoDbConfiguration;
 import com.lordofthejars.nosqlunit.mongodb.MongoDbRule;
+import com.lordofthejars.nosqlunit.mongodb.SpringMongoDbRule;
+import com.mongodb.MockMongoClient;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,14 +26,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.data.mongodb.config.MongoConfigurationSupport;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-
 
 import static com.lordofthejars.nosqlunit.mongodb.MongoDbRule.MongoDbRuleBuilder.newMongoDbRule;
 import static com.lordofthejars.nosqlunit.mongodb.InMemoryMongoDb.InMemoryMongoRuleBuilder.newInMemoryMongoDbRule;
@@ -38,15 +41,28 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @Profile("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@UsingDataSet(locations = "/testBasicDb.json",loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
+//@ContextConfiguration(classes = {FongoConfiguration.class})
+//@UsingDataSet(locations = "/testBasicDb.json",loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 public class MovieRepositoryTest {
     private static Logger LOGGER = LoggerFactory.getLogger(MovieRepositoryTest.class);
-//
-//    @ClassRule
-//    public static InMemoryMongoDb inMemoryMongoDb = newInMemoryMongoDbRule().build();
+
+    @ClassRule
+    public static InMemoryMongoDb inMemoryMongoDb = newInMemoryMongoDbRule().build();
 
     @Rule
-    public MongoDbRule mongoDbRule = newMongoDbRule().defaultSpringMongoDb("demo-test");
+    public MongoDbRule mongoDbRule = getSpringMongoDBRule();
+
+    private SpringMongoDbRule getSpringMongoDBRule(){
+        MongoDbConfiguration mongoDbConfiguration = new MongoDbConfiguration();
+        mongoDbConfiguration.setDatabaseName("study");
+        MongoClient mongoClient = MockMongoClient.create(new Fongo("movieTest"));
+        mongoDbConfiguration.setMongo(mongoClient);
+        return new SpringMongoDbRule(mongoDbConfiguration);
+    }
+//
+//
+//    @Rule
+//    public MongoDbRule mongoDbRule = newMongoDbRule().defaultSpringMongoDb("demo-test");
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -67,6 +83,7 @@ public class MovieRepositoryTest {
     public void testFindMovieById(){
         LOGGER.info("testFindMovieById");
         Movie onceUponATime = movieRepository.findMovieById("5c2e11c57e7ba8fe7ce2fad4");
+        assertThat(onceUponATime).isNotNull();
         assertThat(onceUponATime.getTitle()).isEqualTo("Once Upon a Time in the West");
     }
 
@@ -107,26 +124,26 @@ public class MovieRepositoryTest {
         return false;
     }
 
-    @ComponentScan(basePackages = "com.bootmovies.movies")
-    @EnableMongoRepositories(basePackages = "com.bootmovies.movies.data")
-    @SpringBootConfiguration
-    public class FongoConfiguration extends MongoConfigurationSupport {
-
-
-        @Override
-        protected String getDatabaseName() {
-            return "demo-test";
-        }
-
-        @Override
-        protected Collection<String> getMappingBasePackages() {
-            return Arrays.asList(new String[]{"com.bootmovies.movies.domain"});
-        }
-
-        @Bean
-        public Mongo mongo(){
-            return new Fongo("mongo-test").getMongo();
-        }
-    }
+//    @ComponentScan(basePackages = "com.bootmovies.movies")
+//    @EnableMongoRepositories(basePackages = "com.bootmovies.movies.data")
+//    @Configuration
+//    public class FongoConfiguration extends MongoConfigurationSupport {
+//
+//
+//        @Override
+//        protected String getDatabaseName() {
+//            return "demo-test";
+//        }
+//
+//        @Override
+//        protected Collection<String> getMappingBasePackages() {
+//            return Arrays.asList(new String[]{"com.bootmovies.movies.domain"});
+//        }
+//
+//        @Bean
+//        public Mongo mongo(){
+//            return new Fongo("mongo-test").getMongo();
+//        }
+//    }
 
 }

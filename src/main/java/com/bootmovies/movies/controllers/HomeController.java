@@ -1,4 +1,4 @@
-package com.bootmovies.movies;
+package com.bootmovies.movies.controllers;
 
 import com.bootmovies.movies.data.MovieRepository;
 import com.bootmovies.movies.domain.Movie;

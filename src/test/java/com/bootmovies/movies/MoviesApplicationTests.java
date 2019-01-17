@@ -2,6 +2,8 @@ package com.bootmovies.movies;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.bootmovies.movies.controllers.HomeController;
+import com.bootmovies.movies.controllers.MovieController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

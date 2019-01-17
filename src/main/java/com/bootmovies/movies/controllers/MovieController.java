@@ -1,8 +1,7 @@
-package com.bootmovies.movies;
+package com.bootmovies.movies.controllers;
 
 import com.bootmovies.movies.data.MovieRepository;
 import com.bootmovies.movies.domain.Movie;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

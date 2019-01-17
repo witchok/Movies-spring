@@ -1,5 +1,5 @@
 {
-  "movie": [
+  "movieTest": [
     {
       "_id": ObjectId("5c2e11c57e7ba8fe7ce2fad4"),
       "title": "Once Upon a Time in the West",

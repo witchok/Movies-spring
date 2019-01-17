@@ -15,9 +15,9 @@
 
 <body>
 <div id="header" th:include="base :: header"></div>
-<h2 >Rating IMDB: </h2>
+<h2 >Rating Tomato: </h2>
 <div class="list-group">
-    <div th:each="movie, iter : ${imdbMovies}" class="list-group-item list-group-item-action flex-column align-items-start ">
+    <div th:each="movie, iter : ${tomatoMovies}" class="list-group-item list-group-item-action flex-column align-items-start ">
         <a th:href="@{'/movies/'+${movie.id}}" class="movie-link">
             <div class="d-flex w-100 justify-content-between">
                 <span th:text="${iter.index}+1"></span>
@@ -33,7 +33,7 @@
                         <span th:text="${movie.director}">movie director</span>
                     </div>
                     <div class="imdb-rating-container">
-                        <span>IMDB: </span><span th:text="${movie.imdb.rating}"></span>
+                        <span>Tomato meter: </span><span th:text="${movie.tomato.meter}"></span>
                     </div>
                 </div>
             </div>

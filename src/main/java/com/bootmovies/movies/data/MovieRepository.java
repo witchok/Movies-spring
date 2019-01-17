@@ -36,7 +36,14 @@ public interface MovieRepository extends MongoRepository<Movie, String> {
     List<Movie> searchForMoviesByTitleRegex (String regex);
 
     @Query("{'imdb':{$ne:null}}")
-    List<Movie> findMoviesForIMDBRating(Pageable pageable);
+    List<Movie> findMoviesWithIMDBRating(Pageable pageable);
+
+    @Query("{'tomato':{$ne:null}}")
+    List<Movie> findMoviesWithTomatoRating(Pageable pageable);
+
+    @Query("{'metacritic':{$ne:null}}")
+    List<Movie> findMoviesWithMetacriticRating(Pageable pageable);
+
 
     Movie save(Movie movie);
 

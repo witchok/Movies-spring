@@ -24,15 +24,36 @@ public class MovieRatingController {
     @Autowired
     private MovieRepository movieRepository;
 
-    @RequestMapping(value="/IMDB", method=GET)
+    @RequestMapping(value="/imdb", method=GET)
     public String moviesByImDbRating(Model model){
         logger.info("get movies by IMDB rating");
-        Sort sort = new Sort(Sort.Direction.ASC,"IMDB.rating");
-        Pageable page = PageRequest.of(0,3, sort);
-        List<Movie> movieList = movieRepository.findMoviesForIMDBRating(page);
+        Sort sort = new Sort(Sort.Direction.DESC,"IMDB.rating");
+        Pageable page = PageRequest.of(0,10, sort);
+        List<Movie> movieList = movieRepository.findMoviesWithIMDBRating(page);
         logger.info("len of movies for imdb rating "+movieList.size());
         model.addAttribute("imdbMovies",movieList);
         return "ratingPageIMDB";
     }
 
+    @RequestMapping(value="/tomato", method=GET)
+    public String moviesByTomatoRating(Model model){
+        logger.info("get movies by tomato rating");
+        Sort sort = new Sort(Sort.Direction.ASC,"tomato.meter");
+        Pageable page = PageRequest.of(0,10, sort);
+        List<Movie> movieList = movieRepository.findMoviesWithTomatoRating(page);
+        logger.info("len of movies for tomato rating "+movieList.size());
+        model.addAttribute("tomatoMovies",movieList);
+        return "ratingPageTomato";
+    }
+
+    @RequestMapping(value="/metacritic", method=GET)
+    public String moviesByMetacriticRating(Model model){
+        logger.info("get movies by metacritic rating");
+        Sort sort = new Sort(Sort.Direction.ASC,"metacritic");
+        Pageable page = PageRequest.of(0,10, sort);
+        List<Movie> movieList = movieRepository.findMoviesWithMetacriticRating(page);
+        logger.info("len of movies for metacritic rating "+movieList.size());
+        model.addAttribute("metacriticMovies",movieList);
+        return "ratingPageMetacritic";
+    }
 }

@@ -110,3 +110,6 @@ body{
 .dropdown-menu{
     background: lightgrey;
 }
+
+
+ul.nav li.dropdown:hover ul.dropdown-menu { display: block; }

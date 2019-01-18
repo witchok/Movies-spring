@@ -7,12 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface MovieRepository extends MongoRepository<Movie, String> {
+public interface MovieRepository extends MongoRepository<Movie, String>, PagingAndSortingRepository<Movie, String> {
     List<Movie> findMovieByYearGreaterThan(int than);
 //    @Query("{'_id':?0}")
     Movie findMovieById(String id);
@@ -35,14 +36,15 @@ public interface MovieRepository extends MongoRepository<Movie, String> {
     @Query("{'title':{$regex:?0, $options:'i'}}")
     List<Movie> searchForMoviesByTitleRegex (String regex);
 
-    @Query("{'imdb':{$ne:null}}")
-    List<Movie> findMoviesWithIMDBRating(Pageable pageable);
+//    @Query("{'imdb':{$ne:null}}")
 
-    @Query("{'tomato':{$ne:null}}")
-    List<Movie> findMoviesWithTomatoRating(Pageable pageable);
+    List<Movie> findMoviesByImdbIsNotNull(Pageable page);
 
-    @Query("{'metacritic':{$ne:null}}")
-    List<Movie> findMoviesWithMetacriticRating(Pageable pageable);
+//    @Query("{'tomato':{$ne:null}}")
+    List<Movie> findMoviesByTomatoIsNotNull(Pageable page);
+
+//    @Query("{'metacritic':{$ne:null}}")
+    List<Movie> findMoviesByMetacriticIsNotNull(Pageable page);
 
 
     Movie save(Movie movie);

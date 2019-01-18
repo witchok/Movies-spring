@@ -27,9 +27,9 @@ public class MovieRatingController {
     @RequestMapping(value="/imdb", method=GET)
     public String moviesByImDbRating(Model model){
         logger.info("get movies by IMDB rating");
-        Sort sort = new Sort(Sort.Direction.DESC,"IMDB.rating");
-        Pageable page = PageRequest.of(0,10, sort);
-        List<Movie> movieList = movieRepository.findMoviesWithIMDBRating(page);
+        Sort sort = new Sort(Sort.Direction.DESC,"imdb.rating");
+        Pageable page = PageRequest.of(0,5, sort);
+        List<Movie> movieList = movieRepository.findMoviesByImdbIsNotNull(page);
         logger.info("len of movies for imdb rating "+movieList.size());
         model.addAttribute("imdbMovies",movieList);
         return "ratingPageIMDB";
@@ -38,9 +38,9 @@ public class MovieRatingController {
     @RequestMapping(value="/tomato", method=GET)
     public String moviesByTomatoRating(Model model){
         logger.info("get movies by tomato rating");
-        Sort sort = new Sort(Sort.Direction.ASC,"tomato.meter");
-        Pageable page = PageRequest.of(0,10, sort);
-        List<Movie> movieList = movieRepository.findMoviesWithTomatoRating(page);
+        Sort sort = new Sort(Sort.Direction.DESC,"tomato.meter");
+        Pageable page = PageRequest.of(0,5, sort);
+        List<Movie> movieList = movieRepository.findMoviesByTomatoIsNotNull(page);
         logger.info("len of movies for tomato rating "+movieList.size());
         model.addAttribute("tomatoMovies",movieList);
         return "ratingPageTomato";
@@ -49,9 +49,9 @@ public class MovieRatingController {
     @RequestMapping(value="/metacritic", method=GET)
     public String moviesByMetacriticRating(Model model){
         logger.info("get movies by metacritic rating");
-        Sort sort = new Sort(Sort.Direction.ASC,"metacritic");
-        Pageable page = PageRequest.of(0,10, sort);
-        List<Movie> movieList = movieRepository.findMoviesWithMetacriticRating(page);
+        Sort sort = new Sort(Sort.Direction.DESC,"metacritic");
+        Pageable page = PageRequest.of(0,5, sort);
+        List<Movie> movieList = movieRepository.findMoviesByMetacriticIsNotNull(page);
         logger.info("len of movies for metacritic rating "+movieList.size());
         model.addAttribute("metacriticMovies",movieList);
         return "ratingPageMetacritic";

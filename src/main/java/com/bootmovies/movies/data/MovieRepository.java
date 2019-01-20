@@ -3,6 +3,7 @@ package com.bootmovies.movies.data;
 
 import com.bootmovies.movies.domain.Movie;
 //import org.bson.types.ObjectId;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -45,7 +46,6 @@ public interface MovieRepository extends MongoRepository<Movie, String>, PagingA
 
 //    @Query("{'metacritic':{$ne:null}}")
     List<Movie> findMoviesByMetacriticIsNotNull(Pageable page);
-
 
     Movie save(Movie movie);
 

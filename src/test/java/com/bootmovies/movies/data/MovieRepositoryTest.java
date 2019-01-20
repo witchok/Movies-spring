@@ -1,149 +1,167 @@
 package com.bootmovies.movies.data;
 
-
+import com.bootmovies.movies.MoviesApplication;
+import com.bootmovies.movies.config.EmbeddedMongoConfig;
 import com.bootmovies.movies.domain.Movie;
-import com.github.fakemongo.Fongo;
-import com.lordofthejars.nosqlunit.annotation.ShouldMatchDataSet;
-import com.lordofthejars.nosqlunit.annotation.UsingDataSet;
-import com.lordofthejars.nosqlunit.core.LoadStrategyEnum;
-import com.lordofthejars.nosqlunit.mongodb.InMemoryMongoDb;
-import com.lordofthejars.nosqlunit.mongodb.MongoDbConfiguration;
-import com.lordofthejars.nosqlunit.mongodb.MongoDbRule;
-import com.lordofthejars.nosqlunit.mongodb.SpringMongoDbRule;
-import com.mongodb.MockMongoClient;
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import org.junit.ClassRule;
-import org.junit.Rule;
+import com.mongodb.*;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.util.JSON;
+import de.flapdoodle.embed.mongo.MongodExecutable;
+import org.bson.Document;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
-import org.springframework.data.mongodb.config.MongoConfigurationSupport;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-import static com.lordofthejars.nosqlunit.mongodb.MongoDbRule.MongoDbRuleBuilder.newMongoDbRule;
-import static com.lordofthejars.nosqlunit.mongodb.InMemoryMongoDb.InMemoryMongoRuleBuilder.newInMemoryMongoDbRule;
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
-@Profile("test")
+@ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
-//@ContextConfiguration(classes = {FongoConfiguration.class})
-//@UsingDataSet(locations = "/testBasicDb.json",loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
+@ContextConfiguration(classes =   {EmbeddedMongoConfig.class})
 public class MovieRepositoryTest {
-    private static Logger LOGGER = LoggerFactory.getLogger(MovieRepositoryTest.class);
 
-    @ClassRule
-    public static InMemoryMongoDb inMemoryMongoDb = newInMemoryMongoDbRule().build();
+    private static MongoDatabase mongoDatabase;
 
-    @Rule
-    public MongoDbRule mongoDbRule = getSpringMongoDBRule();
+    private static MongoCollection movieCollection;
 
-    private SpringMongoDbRule getSpringMongoDBRule(){
-        MongoDbConfiguration mongoDbConfiguration = new MongoDbConfiguration();
-        mongoDbConfiguration.setDatabaseName("study");
-        MongoClient mongoClient = MockMongoClient.create(new Fongo("movieTest"));
-        mongoDbConfiguration.setMongo(mongoClient);
-        return new SpringMongoDbRule(mongoDbConfiguration);
-    }
-//
-//
-//    @Rule
-//    public MongoDbRule mongoDbRule = newMongoDbRule().defaultSpringMongoDb("demo-test");
 
     @Autowired
-    private ApplicationContext applicationContext;
+    private MongodExecutable mongod;
 
     @Autowired
     private MovieRepository movieRepository;
 
+    @BeforeClass
+    public static void prepareDB(){
+        MongoClient mongoClient = new MongoClient(new ServerAddress(EmbeddedMongoConfig.IP, EmbeddedMongoConfig.PORT));
+        mongoDatabase = mongoClient.getDatabase("test");
+        movieCollection = mongoDatabase.getCollection("movies");
+    }
+
+
+    @After
+    public void clean() {
+        movieCollection.drop();
+    }
+
+
     @Test
-    @UsingDataSet(locations = "/testBasicDb.json",loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
-    public void testCountAllMovies(){
-        LOGGER.info("testCountAllMovies");
-        long total = movieRepository.count();
-        assertThat(total).isEqualTo(7);
+    public void testSave() {
+
+        Movie movieToSave = createSimpleMovie("Movie 1");
+        movieRepository.save(movieToSave);
+        assertThat(movieRepository.findAll().size()).isEqualTo(1);
+        Movie movie = movieRepository.findAll().get(0);
+        assertThat(movie.getTitle()).isEqualTo(movieToSave.getTitle());
+        assertThat(movie.getId()).isNotNull();
+
+    }
+
+
+    @Test
+    public void testFindMovieByTitle(){
+        Movie movieToFind = createSimpleMovie("Title1");
+        movieToFind.setDirector("Cameron");
+
+        movieRepository.save(movieToFind);
+        movieRepository.save(createSimpleMovie("Title2"));
+        movieRepository.save(createSimpleMovie("Title3"));
+        movieRepository.save(createSimpleMovie("Title4"));
+
+        Movie resultMovie = movieRepository.findMovieByTitle(movieToFind.getTitle());
+
+        assertThat(resultMovie).isNotNull();
+        assertThat(resultMovie.getDirector()).isEqualTo(movieToFind.getDirector());
+        assertThat(movieRepository.findMovieByTitle("None")).isNull();
+    }
+
+
+    @Test
+    public void testFindMoviesByActor(){
+        movieRepository.save(createSimpleMovieWithActors("Title1",Arrays.asList("Actor1","Actor2")));
+        Movie legend = movieRepository.save(createSimpleMovieWithActors("Legend",Arrays.asList("Actor2","Tom Hardy")));
+        movieRepository.save(createSimpleMovieWithActors("Title3",Arrays.asList("Actor1","Actor6")));
+        Movie taboo = movieRepository.save(createSimpleMovieWithActors("Taboo",Arrays.asList("Tom Hardy","Actor3")));
+        Movie bronson = movieRepository.save(createSimpleMovieWithActors("Bronson",Arrays.asList("Tom Hardy","Actor1")));
+
+        List<Movie> moviesWithTom = movieRepository.findMoviesByActor("Tom Hardy");
+        assertThat(moviesWithTom).size().isEqualTo(3);
+        assertTrue(checkIfMovieWithTitleIsInList(legend.getTitle(),moviesWithTom));
+        assertTrue(checkIfMovieWithTitleIsInList(taboo.getTitle(),moviesWithTom));
+        assertTrue(checkIfMovieWithTitleIsInList(bronson.getTitle(),moviesWithTom));
+
+
+        assertThat(movieRepository.findMoviesByActor("Bruce Willis")).isEmpty();
     }
 
     @Test
-    @UsingDataSet(locations = "/testBasicDb.json",loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
-    public void testFindMovieById(){
-        LOGGER.info("testFindMovieById");
-        Movie onceUponATime = movieRepository.findMovieById("5c2e11c57e7ba8fe7ce2fad4");
-        assertThat(onceUponATime).isNotNull();
-        assertThat(onceUponATime.getTitle()).isEqualTo("Once Upon a Time in the West");
+    public void testFindMoviesByDirector(){
+        movieRepository.save(createSimpleMovieWithDirector("Title1","director1"));
+        Movie lotr = movieRepository.save(createSimpleMovieWithDirector("Lord Of The Rings","Jackson"));
+        movieRepository.save(createSimpleMovieWithDirector("Avatar","Cameron"));
+        Movie hobbit = movieRepository.save(createSimpleMovieWithDirector("The Hobbit","Jackson"));
+        movieRepository.save(createSimpleMovieWithDirector("Alien","Cameron"));
+
+        List<Movie> jacksonMovies = movieRepository.findMoviesByDirector("Jackson");
+        assertThat(jacksonMovies).size().isEqualTo(2);
+        assertTrue(checkIfMovieWithTitleIsInList(hobbit.getTitle(),jacksonMovies));
+        assertTrue(checkIfMovieWithTitleIsInList(lotr.getTitle(),jacksonMovies));
+
+
+        assertThat(movieRepository.findMoviesByDirector("Quentin Tarantino")).isEmpty();
     }
 
-    @Test
-    @UsingDataSet(locations = "/testBasicDb.json",loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
-    public void testFindMoviesByCountry(){
-        LOGGER.info("testFindMoviesByCountry");
-        List<Movie> moviesUSA = movieRepository.findMoviesByCountry("USA");
-        assertThat(moviesUSA.size()).isEqualTo(6);
-        assertThat(containsMovieWithId(moviesUSA, "5c2e11c57e7ba8fe7ce2fad8")).isFalse();
-    }
+    //TODO: other tests
 
-    @Test
-    @UsingDataSet(locations = "/testBasicDb.json",loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
-    public void testSearchForMoviesByTitleRegex(){
-        LOGGER.info("testSearchForMoviesByTitleRegex");
-        List<Movie> moviesSearch = movieRepository.searchForMoviesByTitleRegex("west");
-        assertThat(moviesSearch.size()).isEqualTo(6);
-        assertThat(containsMovieWithId(moviesSearch, "5c2e11c57e7ba8fe7ce2fada")).isFalse();
-    }
-
-    @Test
-    @UsingDataSet(locations = "/testBasicDb.json",loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
-    public void testSave(){
-        LOGGER.info("testSave");
-        Movie movie = new Movie("movie 1", 2012, "R", 120, "Jackson", null,
+    private static Movie createSimpleMovie(String name){
+        List<String> countries = new ArrayList<>();
+        countries.add("USA");
+        return new Movie(name, 2012, "R", 120, "Jackson",
+                null,
                 null,null,null,"plot","url", null, null, 23,
                 null, "movie");
-        Movie movieAfterSave = movieRepository.save(movie);
-        assertThat(movieAfterSave.getTitle()).isNotNull();
-        assertThat(movieRepository.count()).isEqualTo(8);
-
     }
-    private static boolean containsMovieWithId(List<Movie> movies, String id){
+
+    private static Movie createSimpleMovieWithActors(String name, List<String> actors){
+        Movie movie = createSimpleMovie(name);
+        movie.setActors(actors);
+        return movie;
+    }
+
+    private static Movie createSimpleMovieWithWriters(String name, List<String> writers){
+        Movie movie = createSimpleMovie(name);
+        movie.setWriters(writers);
+        return movie;
+    }
+
+    private static Movie createSimpleMovieWithDirector(String name, String director){
+        Movie movie = createSimpleMovie(name);
+        movie.setDirector(director);
+        return movie;
+    }
+
+    private static boolean checkIfMovieWithTitleIsInList( String title, List<Movie> movies){
         for (Movie movie: movies){
-            if (movie.getId().equals(id)) return true;
+            if (movie.getTitle().equals(title)) return true;
         }
         return false;
     }
-
-//    @ComponentScan(basePackages = "com.bootmovies.movies")
-//    @EnableMongoRepositories(basePackages = "com.bootmovies.movies.data")
-//    @Configuration
-//    public class FongoConfiguration extends MongoConfigurationSupport {
-//
-//
-//        @Override
-//        protected String getDatabaseName() {
-//            return "demo-test";
-//        }
-//
-//        @Override
-//        protected Collection<String> getMappingBasePackages() {
-//            return Arrays.asList(new String[]{"com.bootmovies.movies.domain"});
-//        }
-//
-//        @Bean
-//        public Mongo mongo(){
-//            return new Fongo("mongo-test").getMongo();
-//        }
-//    }
-
 }

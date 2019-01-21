@@ -1,38 +1,27 @@
 package com.bootmovies.movies.data;
 
-import com.bootmovies.movies.MoviesApplication;
 import com.bootmovies.movies.config.EmbeddedMongoConfig;
 import com.bootmovies.movies.domain.Movie;
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.util.JSON;
-import de.flapdoodle.embed.mongo.MongodExecutable;
-import org.bson.Document;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static com.bootmovies.movies.MoviesCreator.*;
+
 
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -215,53 +204,7 @@ public class MovieRepositoryTest {
 
     }
 
-
     //TODO: other tests
-
-    private static Movie createSimpleMovie(String name){
-        List<String> countries = new ArrayList<>();
-        countries.add("USA");
-        return new Movie(name, 2012, "R", 120, "Jackson",
-                null,
-                null,null,null,"plot","url", null, null, 23,
-                null, "movie");
-    }
-
-    private static Movie createSimpleMovieWithActors(String name, List<String> actors){
-        Movie movie = createSimpleMovie(name);
-        movie.setActors(actors);
-        return movie;
-    }
-
-    private static Movie createSimpleMovieWithWriters(String name, List<String> writers){
-        Movie movie = createSimpleMovie(name);
-        movie.setWriters(writers);
-        return movie;
-    }
-
-    private static Movie createSimpleMovieWithDirector(String name, String director){
-        Movie movie = createSimpleMovie(name);
-        movie.setDirector(director);
-        return movie;
-    }
-
-    private static Movie createSimpleMovieWithGenres(String name, List<String> genres){
-        Movie movie = createSimpleMovie(name);
-        movie.setGenres(genres);
-        return movie;
-    }
-
-    private static Movie createSimpleMovieWithCountries(String name, List<String> countries){
-        Movie movie = createSimpleMovie(name);
-        movie.setCountries(countries);
-        return movie;
-    }
-
-    private static Movie createSimpleMovieWithId(String name, String id){
-        Movie movie = createSimpleMovie(name);
-        movie.setId(id);
-        return movie;
-    }
 
     private static boolean checkIfMovieWithTitleIsInList( String title, List<Movie> movies){
         for (Movie movie: movies){

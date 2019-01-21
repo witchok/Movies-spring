@@ -17,14 +17,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("/")
 public class HomeController {
     private final static Logger logger = LoggerFactory.getLogger(HomeController.class);
+    public static final int YEAR = 2000;
     @Autowired
     private MovieRepository movieRepository;
 
     @RequestMapping(method = GET)
     public String homePage(Model model){
         //List<Movie> recentMovies = movieRepository.findMovieByYearGreaterThan(2000);
-        List<Movie> recentMovies = movieRepository.findMovieByYearGreaterThan(1990);
-        logger.info("Len of All movies: "+recentMovies.size());
+        List<Movie> recentMovies = movieRepository.findMovieByYearGreaterThan(YEAR);
+        logger.info("Len of newest movies: {}",recentMovies.size());
         model.addAttribute("recentMovies",recentMovies);
         return "home";
     }

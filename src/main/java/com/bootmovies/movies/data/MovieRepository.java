@@ -11,12 +11,13 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Repository
 public interface MovieRepository extends MongoRepository<Movie, String>, PagingAndSortingRepository<Movie, String> {
     List<Movie> findMovieByYearGreaterThan(int than);
-//    @Query("{'_id':?0}")
+
     Movie findMovieById(String id);
 
     Movie findMovieByTitle(String title);
@@ -37,16 +38,11 @@ public interface MovieRepository extends MongoRepository<Movie, String>, PagingA
     @Query("{'title':{$regex:?0, $options:'i'}}")
     List<Movie> searchForMoviesByTitleRegex (String regex);
 
-//    @Query("{'imdb':{$ne:null}}")
-
     List<Movie> findMoviesByImdbIsNotNull(Pageable page);
 
-//    @Query("{'tomato':{$ne:null}}")
     List<Movie> findMoviesByTomatoIsNotNull(Pageable page);
 
-//    @Query("{'metacritic':{$ne:null}}")
     List<Movie> findMoviesByMetacriticIsNotNull(Pageable page);
 
     Movie save(Movie movie);
-
 }

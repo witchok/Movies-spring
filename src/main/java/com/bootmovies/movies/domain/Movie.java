@@ -1,5 +1,6 @@
 package com.bootmovies.movies.domain;
 
+import com.mongodb.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,11 +39,12 @@ public class Movie {
     private String posterUrl;
     private IMDB imdb;
     private Tomato tomato;
-    private int metacritic;
+    @Nullable
+    private Integer metacritic;
     private Awards awards;
     private String type;
 
-    public Movie(String title, int year, String rated, int runtime, String director, ArrayList<String> countries, ArrayList<String> genres, ArrayList<String> writers, ArrayList<String> actors, String plot, String posterUrl, IMDB imdb, Tomato tomato, int metacritic, Awards awards, String type) {
+    public Movie(String title, int year, String rated, int runtime, String director, ArrayList<String> countries, ArrayList<String> genres, ArrayList<String> writers, ArrayList<String> actors, String plot, String posterUrl, IMDB imdb, Tomato tomato, Integer metacritic, Awards awards, String type) {
         this.title = title;
         this.year = year;
         this.rated = rated;
@@ -158,7 +160,7 @@ public class Movie {
         this.tomato = tomato;
     }
 
-    public int getMetacritic() {
+    public Integer getMetacritic() {
         return metacritic;
     }
 

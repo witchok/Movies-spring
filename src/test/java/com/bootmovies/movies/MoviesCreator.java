@@ -1,6 +1,8 @@
 package com.bootmovies.movies;
 
+import com.bootmovies.movies.domain.IMDB;
 import com.bootmovies.movies.domain.Movie;
+import com.bootmovies.movies.domain.Tomato;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,4 +53,23 @@ public abstract class MoviesCreator {
         return movie;
     }
 
+    public static Movie createSimpleMovieWithImdbRating(String name, double rating){
+        Movie movie = createSimpleMovie(name);
+        movie.setImdb(new IMDB("t1234",rating,1234));
+        return movie;
+    }
+
+    public static Movie createSimpleMovieWithMetacriticRating(String name, int rating){
+        Movie movie = createSimpleMovie(name);
+        movie.setMetacritic(rating);
+        return movie;
+    }
+
+    public static Movie createSimpleMovieWithTomatoMeter(String name, int meter){
+        Movie movie = createSimpleMovie(name);
+        Tomato tomato = new Tomato();
+        tomato.setMeter(meter);
+        movie.setTomato(tomato);
+        return movie;
+    }
 }

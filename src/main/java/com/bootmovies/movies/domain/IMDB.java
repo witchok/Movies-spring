@@ -10,6 +10,13 @@ public class IMDB {
     private double rating;
     private int votes;
 
+
+    public IMDB(String id, double rating, int votes) {
+        this.id = id;
+        this.rating = rating;
+        this.votes = votes;
+    }
+
     public String getId() {
         return id;
     }

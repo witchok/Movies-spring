@@ -30,7 +30,7 @@ public class MovieRatingController {
         Sort sort = new Sort(Sort.Direction.DESC,"imdb.rating");
         Pageable page = PageRequest.of(0,5, sort);
         List<Movie> movieList = movieRepository.findMoviesByImdbIsNotNull(page);
-        logger.info("len of movies for imdb rating "+movieList.size());
+        logger.info("len of movies for imdb rating {}",movieList.size());
         model.addAttribute("imdbMovies",movieList);
         return "ratingPageIMDB";
     }

@@ -36,7 +36,7 @@ public class MovieController {
     @RequestMapping (value = "/{id}", method=GET)
     public String movieProfile(@PathVariable("id") String id,
                                Model model){
-        log.info("Get movie profile for "+id);
+        log.info("Get movie profile for {}", id);
         Movie movie = repo.findMovieById(id);
         log.info(movie == null ? "Movie is null" : "Movie is not null");
         model.addAttribute("movie", movie);
@@ -44,18 +44,18 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/sameCountry/{country}", method = GET)
-    public String moviesCountry(@PathVariable("country") String country,
+    public String moviesByCountry(@PathVariable("country") String country,
         Model model) {
         log.info("Get moviesCountry");
         List<Movie> movies = repo.findMoviesByCountry(country);
-        log.info("moviesCountry size: " + movies.size());
+        log.info("moviesCountry size: {}", movies.size());
         model.addAttribute("moviesByProperty",movies);
         model.addAttribute("messageProper","Movies filmed in "+country);
         return "moviesByProperty";
     }
 
     @RequestMapping(value = "/sameGenre/{genre}", method = GET)
-    public String moviesGenre(@PathVariable("genre") String genre,
+    public String moviesByGenre(@PathVariable("genre") String genre,
                                 Model model) {
         log.info("Get moviesGenre");
         List<Movie> movies = repo.findMoviesByGenre(genre);
@@ -66,7 +66,7 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/sameWriter/{writer}", method = GET)
-    public String moviesWriter(@PathVariable("writer") String writer,
+    public String moviesByWriter(@PathVariable("writer") String writer,
                               Model model) {
         log.info("Get moviesWriter");
         List<Movie> movies = repo.findMoviesByWriter(writer);
@@ -77,7 +77,7 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/sameActor/{actor}", method = GET)
-    public String moviesActor(@PathVariable("actor") String actor,
+    public String moviesByActor(@PathVariable("actor") String actor,
                               Model model) {
         log.info("Get moviesActor");
         List<Movie> movies = repo.findMoviesByActor(actor);
@@ -88,7 +88,7 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/sameDirector/{director}", method = GET)
-    public String moviesDirector(@PathVariable("director") String director,
+    public String moviesByDirector(@PathVariable("director") String director,
                               Model model) {
         log.info("Get moviesDirector");
         List<Movie> movies = repo.findMoviesByDirector(director);
@@ -101,7 +101,7 @@ public class MovieController {
     @RequestMapping(value = "/searchMovie", method = GET)
     public String searchMovie(@RequestParam("reg") String reg,
                               Model model){
-        if(reg!=null) {
+        if(reg!=null && reg!="") {
             log.info("Get searchMovie");
             List<Movie> movies = repo.searchForMoviesByTitleRegex(reg);
             log.info("search movies size: " + movies.size());

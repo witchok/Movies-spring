@@ -31,7 +31,7 @@ public class MovieControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void testMovieProfile() throws Exception {
+    public void testMovieProfileById() throws Exception {
         String id = "5bc640f898b2ea7bc57e19e2";
         when(movieRepository.findMovieById (id))
                 .thenReturn(createSimpleMovieWithId("testMovie",id));
@@ -40,6 +40,17 @@ public class MovieControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("movie",hasProperty("id", Matchers.equalTo(id))))
                 .andExpect(view().name("moviePage"));
+    }
+
+    @Test
+    public void testMovieNotFoundById() throws Exception {
+        String id = "5bc640f898b2ea7bc57e19e2";
+        when(movieRepository.findMovieById (id))
+                .thenReturn(null);
+
+        mockMvc.perform(get("/movies/5bc640f898b2ea7bc57e19e2"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("errors/movieNotFound"));
     }
 
     @Test
@@ -139,7 +150,8 @@ public class MovieControllerTest {
                 .andExpect(model().attribute("messageProper",Matchers.equalTo("Movies found for request: mov")))
                 .andExpect(view().name("moviesByProperty"));
     }
-//    
+
+//
 //    @Test
 //    public void testSearchMovieWithEmptySearchField() throws Exception {
 //

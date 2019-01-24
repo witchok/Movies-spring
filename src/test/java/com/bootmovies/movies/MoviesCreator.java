@@ -72,4 +72,11 @@ public abstract class MoviesCreator {
         movie.setTomato(tomato);
         return movie;
     }
+
+
+    public static Movie createSimpleMovieWithYear(String name, int year){
+        Movie movie = createSimpleMovie(name);
+        movie.setYear(year);
+        return movie;
+    }
 }

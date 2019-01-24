@@ -10,6 +10,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -202,6 +205,71 @@ public class MovieRepositoryTest {
         assertThat(moviesForRegexWe).size().isEqualTo(4);
         assertFalse(checkIfMovieWithTitleIsInList(movie4.getTitle(),moviesForRegexWes));
 
+    }
+
+    @Test
+    public void testImdbRating() {
+        Movie movie1 = movieRepository.save(createSimpleMovieWithImdbRating("Pulp Fiction",9.2));
+        Movie movie2 = movieRepository.save(createSimpleMovieWithImdbRating("Bone Tomahawk",7.4));
+        Movie movie3 = movieRepository.save(createSimpleMovieWithImdbRating("Green Mile",9.5));
+        Movie movie4 = movieRepository.save(createSimpleMovieWithImdbRating("Venom",6.5));
+        Movie movie5 = movieRepository.save(createSimpleMovieWithImdbRating("Batman: Dark Knight",9.0));
+
+        Pageable page = PageRequest.of(0,3,new Sort(Sort.Direction.DESC, "imdb.rating"));
+        List<Movie> topRatedMoviesByImdb = movieRepository.findMoviesByImdbIsNotNull(page);
+        assertThat(topRatedMoviesByImdb).size().isEqualTo(3);
+        assertThat(topRatedMoviesByImdb.get(0).getTitle()).isEqualTo(movie3.getTitle());
+        assertThat(topRatedMoviesByImdb.get(1).getTitle()).isEqualTo(movie1.getTitle());
+        assertThat(topRatedMoviesByImdb.get(2).getTitle()).isEqualTo(movie5.getTitle());
+    }
+
+    @Test
+    public void testTomatoRating() {
+        Movie movie1 = movieRepository.save(createSimpleMovieWithTomatoMeter("Pulp Fiction",92));
+        Movie movie2 = movieRepository.save(createSimpleMovieWithTomatoMeter("Bone Tomahawk",74));
+        Movie movie3 = movieRepository.save(createSimpleMovieWithTomatoMeter("Green Mile",95));
+        Movie movie4 = movieRepository.save(createSimpleMovieWithTomatoMeter("Venom",65));
+        Movie movie5 = movieRepository.save(createSimpleMovieWithTomatoMeter("Barman: Dark Knight",90));
+
+        Pageable page = PageRequest.of(0,3,new Sort(Sort.Direction.DESC, "tomato.meter"));
+        List<Movie> topRatedMoviesByTomato = movieRepository.findMoviesByTomatoIsNotNull(page);
+        assertThat(topRatedMoviesByTomato).size().isEqualTo(3);
+        assertThat(topRatedMoviesByTomato.get(0).getTitle()).isEqualTo(movie3.getTitle());
+        assertThat(topRatedMoviesByTomato.get(1).getTitle()).isEqualTo(movie1.getTitle());
+        assertThat(topRatedMoviesByTomato.get(2).getTitle()).isEqualTo(movie5.getTitle());
+    }
+
+    @Test
+    public void testMetacriticRating() {
+        Movie movie1 = movieRepository.save(createSimpleMovieWithMetacriticRating("Pulp Fiction",92));
+        Movie movie2 = movieRepository.save(createSimpleMovieWithMetacriticRating("Bone Tomahawk",74));
+        Movie movie3 = movieRepository.save(createSimpleMovieWithMetacriticRating("Green Mile",95));
+        Movie movie4 = movieRepository.save(createSimpleMovieWithMetacriticRating("Venom",65));
+        Movie movie5 = movieRepository.save(createSimpleMovieWithMetacriticRating("Barman: Dark Knight",90));
+
+        Pageable page = PageRequest.of(0,3,new Sort(Sort.Direction.DESC, "metacritic"));
+        List<Movie> topRatedMoviesByMetacritic = movieRepository.findMoviesByMetacriticIsNotNull(page);
+        assertThat(topRatedMoviesByMetacritic).size().isEqualTo(3);
+        assertThat(topRatedMoviesByMetacritic.get(0).getTitle()).isEqualTo(movie3.getTitle());
+        assertThat(topRatedMoviesByMetacritic.get(1).getTitle()).isEqualTo(movie1.getTitle());
+        assertThat(topRatedMoviesByMetacritic.get(2).getTitle()).isEqualTo(movie5.getTitle());
+    }
+
+    @Test
+    public void testFindMovieWithYearGreaterThan() {
+        Movie movie1 = movieRepository.save(createSimpleMovieWithYear("Pulp Fiction",1998));
+        Movie movie2 = movieRepository.save(createSimpleMovieWithYear("Bone Tomahawk",2013));
+        Movie movie3 = movieRepository.save(createSimpleMovieWithYear("Green Mile",2001));
+        Movie movie4 = movieRepository.save(createSimpleMovieWithYear("Venom",2018));
+        Movie movie5 = movieRepository.save(createSimpleMovieWithYear("Batman: Dark Knight",2013));
+
+        Pageable page = PageRequest.of(0,3,new Sort(Sort.Direction.DESC, "year"));
+        List<Movie> moviesWithYearGreaterThan2000 = movieRepository.findMovieByYearGreaterThan(2000,page);
+
+        assertThat(moviesWithYearGreaterThan2000).size().isEqualTo(3);
+        assertThat(moviesWithYearGreaterThan2000.get(0).getTitle()).isEqualTo(movie4.getTitle());
+        assertTrue(checkIfMovieWithTitleIsInList(movie2.getTitle(),moviesWithYearGreaterThan2000));
+        assertTrue(checkIfMovieWithTitleIsInList(movie5.getTitle(),moviesWithYearGreaterThan2000));
     }
 
     //TODO: other tests

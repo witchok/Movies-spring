@@ -2,14 +2,14 @@ package com.bootmovies.movies.controllers;
 
 import com.bootmovies.movies.data.MovieRepository;
 import com.bootmovies.movies.domain.Movie;
+import com.bootmovies.movies.exceptions.MovieNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +38,9 @@ public class MovieController {
                                Model model){
         log.info("Get movie profile for {}", id);
         Movie movie = repo.findMovieById(id);
+        if(movie == null){
+            throw new MovieNotFoundException();
+        }
         log.info(movie == null ? "Movie is null" : "Movie is not null");
         model.addAttribute("movie", movie);
         return "moviePage";
@@ -111,5 +114,11 @@ public class MovieController {
             log.info("Empty search field");
         }
         return "moviesByProperty";
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MovieNotFoundException.class)
+    public String movieNotFoundHandle(){
+        return "errors/movieNotFound";
     }
 }

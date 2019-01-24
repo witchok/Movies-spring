@@ -16,7 +16,7 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends MongoRepository<Movie, String>, PagingAndSortingRepository<Movie, String> {
-    List<Movie> findMovieByYearGreaterThan(int year);
+    List<Movie> findMovieByYearGreaterThan(int year, Pageable page);
 
     Movie findMovieById(String id);
 

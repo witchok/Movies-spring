@@ -15,28 +15,96 @@
 
 <body>
     <div id="header" th:include="base :: header"></div>
-    <h2 th:text="#{movie.new}">Movies after 1990</h2>
-    <div class="list-group">
-        <div th:each="movie : ${recentMovies}" class="list-group-item list-group-item-action flex-column align-items-start ">
-            <a th:href="@{'/movies/'+${movie.id}}" class="movie-link">
-                <div class="d-flex w-100 justify-content-between">
-                    <img th:src="${movie.posterUrl}" class="img-fluid rounded float-left list-img" />
-                    <div  class="top-line-div">
-                        <div >
-                            <h5 class="mb-1" th:text="${movie.title}">Movie title</h5>
-                            <small class="movie-list-year" th:text="${movie.year}">movie year</small>
-                        </div>
+    <div class="main-content">
+        <h2 th:text="#{movie.new}">Movies after 1990</h2>
 
-                        <div class="movie-list-director">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div th:each="movie, iter : ${recentMovies}"  class="carousel-item"
+                     th:classappend="${iter.index == 1} ? 'active'">
+                    <a th:href="@{'/movies/'+${movie.id}}" class="movie-link">
+                        <img th:src="${movie.posterUrl}" class="img-fluid rounded float-left inline-div" />
+                    </a>
+                    <div class="inline-div movieInfo">
+                        <span>Title: </span>
+                        <a th:href="@{'/movies/'+${movie.id}}" >
+                            <span th:text="${movie.title}">title</span><br/>
+                        </a>
+                        <span>Year: </span><span th:text="${movie.year}">year</span><br/>
+                        <span>Rated: </span></span> <span th:text="${movie.rated}">rated</span><br/>
+                        <span>Runtime: </span> <span th:text="${movie.runtime}">runtime</span><br/>
+                        <span>Title: </span>
+                        <div>
+                            <span>Countries: </span>
+                            <div th:each="country, iter : ${movie.countries}" class="inline-div">
+                                <a th:href="@{'/movies/sameCountry/'+${country}}">
+                                    <span th:text="${country}" class="categories-elem-inline " ></span>
+                                </a>
+                                <span th:if="${iter.index != (#lists.size(movie.countries)-1)}" >, </span>
+                            </div>
+                        </div>
+                        <div>
+                            <span>Genres: </span>
+                            <div th:each="genre,iter : ${movie.genres}" class="inline-div">
+                                <a th:href="@{'/movies/sameGenre/'+${genre}}">
+                                    <span th:text="${genre}" class="categories-elem-inline " ></span>
+                                </a>
+                                <span th:if="${iter.index != (#lists.size(movie.genres)-1)}" >, </span>
+                            </div>
+                        </div>
+                        <div>
                             <span>Director: </span>
-                            <span th:text="${movie.director}">movie director</span>
+                            <a th:href="@{'/movies/sameDirector/'+${movie.director}}">
+                                <span th:text="${movie.director}"></span>
+                            </a>
+                        </div>
+                        <div>
+                            <span>Writers: </span>
+                            <div th:each="writer,iter : ${movie.writers}" class="inline-div">
+                                <a th:href="@{'/movies/sameWriter/'+${writer}}">
+                                    <span th:text="${writer}" class="categories-elem-inline " ></span>
+                                </a>
+                                <span th:if="${iter.index != (#lists.size(movie.writers)-1)}" >, </span>
+                            </div>
+                        </div>
+                        <div>
+                            <span>Actors: </span>
+                            <div th:each="actor,iter : ${movie.actors}" class="inline-div">
+                                <a th:href="@{'/movies/sameActor/'+${actor}}">
+                                    <span th:text="${actor}" class="categories-elem-inline " ></span>
+                                </a>
+                                <span th:if="${iter.index != (#lists.size(movie.actors)-1)}" >, </span>
+                            </div>
+                        </div>
+                        <div>
+                            <span>Metacritic: </span> <span th:text="${movie.metacritic}"></span>
+                        </div>
+                        <div th:if="${movie.imdb}">
+                            <span>IMDB: </span> <span th:text="${movie.imdb.rating}"></span>
+                        </div>
+                        <div th:if="${movie.tomato}">
+                            <span>Tomato meter: </span> <span th:text="${movie.tomato.meter+'%'}"></span>
                         </div>
                     </div>
                 </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
             </a>
         </div>
     </div>
-
     <div th:include="base :: copy" class="copyright"></div>
 
     <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>

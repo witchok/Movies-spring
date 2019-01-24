@@ -5,12 +5,14 @@ import com.bootmovies.movies.domain.Movie;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 
 @SpringBootApplication(scanBasePackages = {"com.bootmovies.movies",
         "com.bootmovies.movies.config", "com.bootmovies.movies.data"})
+@EnableCaching
 public class MoviesApplication {
     public static void main(String[] args) {
         SpringApplication.run(MoviesApplication.class, args);

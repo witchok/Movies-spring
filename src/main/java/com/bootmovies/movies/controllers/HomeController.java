@@ -5,6 +5,9 @@ import com.bootmovies.movies.domain.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +27,8 @@ public class HomeController {
     @RequestMapping(method = GET)
     public String homePage(Model model){
         //List<Movie> recentMovies = movieRepository.findMovieByYearGreaterThan(2000);
-        List<Movie> recentMovies = movieRepository.findMovieByYearGreaterThan(YEAR);
+        Pageable page = PageRequest.of(0,4, new Sort(Sort.Direction.DESC, "year"));
+        List<Movie> recentMovies = movieRepository.findMovieByYearGreaterThan(YEAR, page);
         logger.info("Len of newest movies: {}",recentMovies.size());
         model.addAttribute("recentMovies",recentMovies);
         return "home";

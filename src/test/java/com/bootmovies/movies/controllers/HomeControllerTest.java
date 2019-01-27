@@ -37,7 +37,7 @@ public class HomeControllerTest {
     public void testHome() throws Exception{
 
         Movie movieToCheck = createSimpleMovie("Movie1");
-        when(movieRepository.findMovieByYearGreaterThan(HomeController.YEAR,
+        when(movieRepository.findMoviesByYearGreaterThan(HomeController.YEAR,
                 PageRequest.of(0,4, new Sort(Sort.Direction.DESC, "year"))))
                 .thenReturn(Arrays.asList(
                         movieToCheck,

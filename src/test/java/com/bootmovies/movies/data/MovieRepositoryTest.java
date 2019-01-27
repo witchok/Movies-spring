@@ -264,7 +264,7 @@ public class MovieRepositoryTest {
         Movie movie5 = movieRepository.save(createSimpleMovieWithYear("Batman: Dark Knight",2013));
 
         Pageable page = PageRequest.of(0,3,new Sort(Sort.Direction.DESC, "year"));
-        List<Movie> moviesWithYearGreaterThan2000 = movieRepository.findMovieByYearGreaterThan(2000,page);
+        List<Movie> moviesWithYearGreaterThan2000 = movieRepository.findMoviesByYearGreaterThan(2000,page);
 
         assertThat(moviesWithYearGreaterThan2000).size().isEqualTo(3);
         assertThat(moviesWithYearGreaterThan2000.get(0).getTitle()).isEqualTo(movie4.getTitle());

@@ -26,9 +26,9 @@ public class HomeController {
 
     @RequestMapping(method = GET)
     public String homePage(Model model){
-        //List<Movie> recentMovies = movieRepository.findMovieByYearGreaterThan(2000);
+        //List<Movie> recentMovies = movieRepository.findMoviesByYearGreaterThan(2000);
         Pageable page = PageRequest.of(0,4, new Sort(Sort.Direction.DESC, "year"));
-        List<Movie> recentMovies = movieRepository.findMovieByYearGreaterThan(YEAR, page);
+        List<Movie> recentMovies = movieRepository.findMoviesByYearGreaterThan(YEAR, page);
         logger.info("Len of newest movies: {}",recentMovies.size());
         model.addAttribute("recentMovies",recentMovies);
         return "home";

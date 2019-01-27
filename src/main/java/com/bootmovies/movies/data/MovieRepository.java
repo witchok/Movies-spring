@@ -3,6 +3,8 @@ package com.bootmovies.movies.data;
 
 import com.bootmovies.movies.domain.Movie;
 //import org.bson.types.ObjectId;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,12 +17,16 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Repository
+@Cacheable(value = "movieCache")
 public interface MovieRepository extends MongoRepository<Movie, String>, PagingAndSortingRepository<Movie, String> {
-    List<Movie> findMovieByYearGreaterThan(int year, Pageable page);
+    List<Movie> findMoviesByYearGreaterThan(int year, Pageable page);
 
+    @Cacheable(key="#id")
     Movie findMovieById(String id);
 
+    @Cacheable(key="#result.id")
     Movie findMovieByTitle(String title);
+
     @Query("{'countries':?0}")
     List<Movie> findMoviesByCountry(String country);
 
@@ -44,5 +50,6 @@ public interface MovieRepository extends MongoRepository<Movie, String>, PagingA
 
     List<Movie> findMoviesByMetacriticIsNotNull(Pageable page);
 
+    @Cacheable(key="#result.id")
     Movie save(Movie movie);
 }

@@ -1,4 +1,4 @@
-package com.bootmovies.movies.data;
+package com.bootmovies.movies.repositories;
 
 import com.bootmovies.movies.config.EmbeddedMongoConfig;
 import com.bootmovies.movies.domain.Movie;

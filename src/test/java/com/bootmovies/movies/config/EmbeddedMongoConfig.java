@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @Primary
 @Profile("test")
-@EnableMongoRepositories("com.bootmovies.movies.data")
+@EnableMongoRepositories("com.bootmovies.movies.repositories")
 public class EmbeddedMongoConfig {
 
     public static final String IP = "localhost";

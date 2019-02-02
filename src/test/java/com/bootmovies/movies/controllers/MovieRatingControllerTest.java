@@ -1,9 +1,8 @@
 package com.bootmovies.movies.controllers;
 
-import com.bootmovies.movies.data.MovieRepository;
+import com.bootmovies.movies.repositories.MovieRepository;
 
 import com.bootmovies.movies.domain.Movie;
-import org.hamcrest.Matchers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

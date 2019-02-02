@@ -147,3 +147,16 @@ ul.nav li.dropdown:hover ul.dropdown-menu { display: block; }
     margin-right: auto;
     width: 20%;
 }
+
+.login-form-container{
+    padding-left: 20%;
+    padding-right: 20%;
+    padding-top: 50px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.form-error{
+    color: red;
+    background: rgba(221,155,199,0.77);
+}

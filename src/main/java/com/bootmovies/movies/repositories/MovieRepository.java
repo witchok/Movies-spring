@@ -1,19 +1,15 @@
-package com.bootmovies.movies.data;
+package com.bootmovies.movies.repositories;
 
 
 import com.bootmovies.movies.domain.Movie;
 //import org.bson.types.ObjectId;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Repository
@@ -21,10 +17,10 @@ import java.util.List;
 public interface MovieRepository extends MongoRepository<Movie, String>, PagingAndSortingRepository<Movie, String> {
     List<Movie> findMoviesByYearGreaterThan(int year, Pageable page);
 
-    @Cacheable(key="#id")
+//    @Cacheable(key="#id")
     Movie findMovieById(String id);
 
-    @Cacheable(key="#result.id")
+//    @Cacheable(key="#result.id")
     Movie findMovieByTitle(String title);
 
     @Query("{'countries':?0}")

@@ -1,6 +1,6 @@
 package com.bootmovies.movies.controllers;
 
-import com.bootmovies.movies.data.MovieRepository;
+import com.bootmovies.movies.repositories.MovieRepository;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;

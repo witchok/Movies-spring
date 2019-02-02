@@ -1,5 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <body>
 
@@ -34,10 +35,22 @@
                         <!--<a class="nav-link disabled" th:href="@{/movies/rating/IMDB}">Disabled</a>-->
                     <!--</li>-->
                 </ul>
+                <div sec:authorize="isAuthenticated()">
+                    <span sec:authentication="name">someone</span>
+                    <form action="#" th:action="@{/logout}" method="post">
+                        <input class="navbar-brand" type="submit" value="Log Out"/>
+                    </form>
+                </div>
+
+                <div sec:authorize="!isAuthenticated()">
+                    <a class="navbar-brand" th:href="@{/login}">Login</a>
+                </div>
+
                 <form class="form-inline my-2 my-lg-0" th:action="@{/movies/searchMovie}">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" th:name="reg">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
+
             </div>
         </nav>
     </div>

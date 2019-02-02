@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.bootmovies.movies.controllers.HomeController;
 import com.bootmovies.movies.controllers.MovieController;
 import com.bootmovies.movies.controllers.MovieRatingController;
-import com.bootmovies.movies.data.MovieRepository;
+import com.bootmovies.movies.repositories.MovieRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

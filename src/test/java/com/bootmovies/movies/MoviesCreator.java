@@ -1,8 +1,8 @@
 package com.bootmovies.movies;
 
-import com.bootmovies.movies.domain.IMDB;
-import com.bootmovies.movies.domain.Movie;
-import com.bootmovies.movies.domain.Tomato;
+import com.bootmovies.movies.domain.movie.IMDB;
+import com.bootmovies.movies.domain.movie.Movie;
+import com.bootmovies.movies.domain.movie.Tomato;
 
 import java.util.ArrayList;
 import java.util.List;

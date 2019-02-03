@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movies</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="http://cdn.jsdelivr.net/webjars/bootstrap/4.1.3/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}">
+    <link rel="stylesheet"
+          type="text/css"
+          th:href="@{/css/style.css}">
+</head>
+<body>
+    <h2 th:text="#{register.title}">Register</h2>
+    <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+        <div>
+            <label th:text="#{register.username}">username</label>
+            <input th:field="*{username}">
+            <p th:each="error : ${#fields.errors('username')}" th:text="${error}">Validation error</p>
+        </div>
+        <div>
+            <label th:text="#{register.email}">email</label>
+            <input th:field="*{email}">
+            <p th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation error</p>
+        </div>
+        <div>
+            <label th:text="#{register.password}">password</label>
+            <input type="password" th:field="*{password}">
+            <p th:each="error : ${#fields.errors('password')}" th:text="${error}">Validation error</p>
+        </div>
+        <div>
+            <label th:text="#{register.password.confirm}">confirm password</label>
+            <input type="password" th:field="*{matchingPassword}">
+        </div>
+            <button type="submit" th:text="#{register.submit}">submit</button>
+        </div>
+    </form>
+    <a th:href="@{/user/login}" th:text="#{loginLink}">Login</a>
+
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+</body>
+</html>

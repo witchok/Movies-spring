@@ -1,7 +1,7 @@
 package com.bootmovies.movies.controllers;
 
 import com.bootmovies.movies.repositories.MovieRepository;
-import com.bootmovies.movies.domain.Movie;
+import com.bootmovies.movies.domain.movie.Movie;
 import com.bootmovies.movies.exceptions.MovieNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,7 @@
 package com.bootmovies.movies.repositories;
 
 
-import com.bootmovies.movies.domain.Movie;
+import com.bootmovies.movies.domain.movie.Movie;
 //import org.bson.types.ObjectId;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;

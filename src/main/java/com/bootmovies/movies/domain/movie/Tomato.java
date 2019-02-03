@@ -1,4 +1,4 @@
-package com.bootmovies.movies.domain;
+package com.bootmovies.movies.domain.movie;
 
 public class Tomato {
     private int meter;

@@ -1,7 +1,6 @@
 package com.bootmovies.movies.config;
 
-import com.bootmovies.movies.domain.enums.UserRoleEnum;
-import org.apache.catalina.User;
+import com.bootmovies.movies.domain.enums.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,11 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +17,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     //Remember for 30 days
     public static final int REMEMBER_ME_TIME = 30*24*60*60;
     public static final String REMEMBER_KEY = "moviesAppKey";
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -36,10 +33,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .key(REMEMBER_KEY)
             .and()
             .logout()
-                .logoutSuccessUrl("/");
-//            .and()
-//            .requiresChannel()
-//                .antMatchers("/login").requiresSecure();
+                .logoutSuccessUrl("/")
+            .and()
+            .requiresChannel()
+                .antMatchers("login.html").requiresSecure();
     }
 
     @Override
@@ -53,15 +50,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser("user1")
                     .password(passwordEncoder().encode("password1"))
-                    .roles(UserRoleEnum.USER.toString())
+                    .roles(UserRole.USER.toString())
                 .and()
                 .withUser("user2")
                     .password(passwordEncoder().encode("password2"))
-                    .roles(UserRoleEnum.USER.toString())
+                    .roles(UserRole.USER.toString())
                 .and()
                 .withUser("admin")
                     .password(passwordEncoder().encode("password3"))
-                    .roles(UserRoleEnum.ADMIN.toString());
+                    .roles(UserRole.USER.toString(),
+                            UserRole.ADMIN.toString());
     }
 
     @Bean

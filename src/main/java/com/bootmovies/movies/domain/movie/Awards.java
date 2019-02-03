@@ -1,4 +1,4 @@
-package com.bootmovies.movies.domain;
+package com.bootmovies.movies.domain.movie;
 
 public class Awards {
     private int wins;

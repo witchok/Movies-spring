@@ -21,12 +21,12 @@
                     <!--</li>-->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Ratings
+                            <span th:text="#{movies.ratings}">Ratings</span>
                         </a>
                         <div id="dropdown-nav" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" th:href="@{/movies/rating/imdb}">IMDB</a>
-                            <a class="dropdown-item" th:href="@{/movies/rating/tomato}">Tomato</a>
-                            <a class="dropdown-item" th:href="@{/movies/rating/metacritic}">MetaCritic</a>
+                            <a class="dropdown-item" th:href="@{/movies/rating/imdb}" th:text="#{movies.ratings.imdb}">IMDB</a>
+                            <a class="dropdown-item" th:href="@{/movies/rating/tomato}" th:text="#{movies.ratings.tomato}">Tomato</a>
+                            <a class="dropdown-item" th:href="@{/movies/rating/metacritic}" th:text="#{movies.ratings.metacritic}">MetaCritic</a>
                             <!--<div class="dropdown-divider"></div>-->
                             <!--<a class="dropdown-item" href="#">Something else here</a>-->
                         </div>
@@ -38,17 +38,17 @@
                 <div sec:authorize="isAuthenticated()">
                     <span sec:authentication="name">someone</span>
                     <form action="#" th:action="@{/logout}" method="post">
-                        <input class="navbar-brand" type="submit" value="Log Out"/>
+                        <input class="navbar-brand" type="submit" th:value="#{logout}" value="Log Out"/>
                     </form>
                 </div>
 
                 <div sec:authorize="!isAuthenticated()">
-                    <a class="navbar-brand" th:href="@{/login}">Login</a>
+                    <a class="navbar-brand" th:href="@{/user/login}" th:text="#{login}">Login</a>
                 </div>
 
                 <form class="form-inline my-2 my-lg-0" th:action="@{/movies/searchMovie}">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" th:name="reg">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" th:value="#{search}">Search</button>
                 </form>
 
             </div>

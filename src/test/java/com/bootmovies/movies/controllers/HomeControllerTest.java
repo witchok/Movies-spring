@@ -13,8 +13,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
@@ -25,7 +30,8 @@ import static com.bootmovies.movies.MoviesCreator.*;
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(HomeController.class)
+@WebMvcTest(value = HomeController.class , secure = false)
+//@ContextConfiguration(classes = TestWebSecurityConfig.class)
 public class HomeControllerTest {
     @MockBean
     private MovieRepository movieRepository;

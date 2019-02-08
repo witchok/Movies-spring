@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
+import java.util.Set;
 
 @Document(collection = "movieUsers")
 public class User {
@@ -17,21 +18,21 @@ public class User {
     @Field("password")
     private String encodedPassword;
     private String email;
-    private String role;
+    private Set<String> roles;
     private Date date;
 
     public User(){ }
 
-    public User(String username, String encodedPassword, String email, String role, Date date) {
-        this(null,username,encodedPassword,email,role, date);
+    public User(String username, String encodedPassword, String email, Set<String> roles, Date date) {
+        this(null,username,encodedPassword,email,roles,date);
     }
 
-    public User(String id, String username, String encodedPassword, String email, String role, Date date) {
+    public User(String id, String username, String encodedPassword, String email,Set<String> roles ,Date date) {
         this.id = id;
         this.username = username;
         this.encodedPassword = encodedPassword;
         this.email = email;
-        this.role = role;
+        this.roles = roles;
         this.date = date;
     }
 
@@ -59,14 +60,6 @@ public class User {
         this.email = email;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getId() {
         return id;
     }
@@ -83,5 +76,13 @@ public class User {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this, "id","username","email");
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 }

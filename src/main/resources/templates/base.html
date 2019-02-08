@@ -36,16 +36,22 @@
                     <!--</li>-->
                 </ul>
                 <div sec:authorize="isAuthenticated()">
-                    <span sec:authentication="name">someone</span>
-                    <form action="#" th:action="@{/logout}" method="post">
-                        <input class="navbar-brand" type="submit" th:value="#{logout}" value="Log Out"/>
-                    </form>
+                    <a th:href="@{/user/}">
+                        <span sec:authentication="name">someone</span>
+                    </a>
+                        <!--<form action="#" th:action="@{/logout}" method="post">-->
+                        <!--<input  type="submit" th:value="#{logout}" value="Sign Out"/>-->
+                    <!--</form>-->
+                    <a class="navbar-brand" th:href="@{/logout}" th:text="#{logout}">Sign Out</a>
                 </div>
 
                 <div sec:authorize="!isAuthenticated()">
-                    <a class="navbar-brand" th:href="@{/user/login}" th:text="#{login}">Login</a>
+                    <a class="navbar-brand" th:href="@{/user/login}" th:text="#{login}">Sign In</a>
                 </div>
 
+                <div sec:authorize="!isAuthenticated()">
+                    <a class="navbar-brand" th:href="@{/user/register}" th:text="#{signup}">Sign Up</a>
+                </div>
                 <form class="form-inline my-2 my-lg-0" th:action="@{/movies/searchMovie}">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" th:name="reg">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit" th:value="#{search}">Search</button>

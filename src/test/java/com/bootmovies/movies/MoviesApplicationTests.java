@@ -2,10 +2,14 @@ package com.bootmovies.movies;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.bootmovies.movies.config.WebSecurityConfig;
 import com.bootmovies.movies.controllers.HomeController;
 import com.bootmovies.movies.controllers.MovieController;
 import com.bootmovies.movies.controllers.MovieRatingController;
 import com.bootmovies.movies.repositories.MovieRepository;
+import com.bootmovies.movies.repositories.user.MovieUserDetailsService;
+import com.bootmovies.movies.repositories.user.UserService;
+import com.bootmovies.movies.repositories.user.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,14 @@ public class MoviesApplicationTests {
     private MovieRatingController movieRatingController;
     @Autowired
     private MovieRepository movieRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private MovieUserDetailsService userDetailsService;
+    @Autowired
+    private WebSecurityConfig securityConfig;
 
     @Test
     public void contextLoads() {
@@ -30,6 +42,10 @@ public class MoviesApplicationTests {
         assertThat(movieController).isNotNull();
         assertThat(movieRatingController).isNotNull();
         assertThat(movieRepository).isNotNull();
+        assertThat(userRepository).isNotNull();
+        assertThat(userService).isNotNull();
+        assertThat(userDetailsService).isNotNull();
+        assertThat(securityConfig).isNotNull();
     }
 
 }

@@ -1,13 +1,12 @@
 package com.bootmovies.movies.domain.user;
 
-import com.bootmovies.movies.annotations.PasswordMatches;
-import lombok.Value;
+import com.bootmovies.movies.annotations.FieldsValuesMatch;
 
-import javax.validation.Valid;
 import javax.validation.constraints.*;
-import java.util.Date;
 
-@PasswordMatches
+@FieldsValuesMatch(message = "{passwords.matching}",
+        field = "password",
+        fieldMatch = "matchingPassword")
 public class UserDTO {
     @NotNull
     @NotEmpty

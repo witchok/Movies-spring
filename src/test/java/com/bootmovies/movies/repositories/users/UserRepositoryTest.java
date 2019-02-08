@@ -25,7 +25,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.Assert.*;
 
 
-@ActiveProfiles("test")
+@ActiveProfiles("integrating-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes =   {EmbeddedMongoConfig.class})
 public class UserRepositoryTest {
@@ -57,33 +57,7 @@ public class UserRepositoryTest {
         assertThat(savedUser.getUsername()).isEqualTo(userToSave.getUsername());
     }
 
-    @Test
-    public void testSaveUserDTO(){
-        UserDTO userDTOToSave = createSimpleUserDTO("User1","em@gmail.com");
-        User savedUser = userRepository.save(userDTOToSave, UserRole.USER);
-        assertThat(userRepository.findAll().size()).isEqualTo(1);
-        assertThat(savedUser.getId()).isNotNull();
-        assertThat(userRepository.findAll().get(0).equals(savedUser));
-        assertThat(savedUser.getUsername()).isEqualTo(userDTOToSave.getUsername());
-    }
 
-    @Test(expected = UserAlreadyExistsException.class)
-    public void testSaveUserWithSameUsername(){
-        UserDTO userDTOToSave = createSimpleUserDTO("User1","em@gmail.com");
-        User savedUser = userRepository.save(userDTOToSave, UserRole.USER);
-
-        UserDTO anotherUser = createSimpleUserDTO("User1","em2@gmail.com");
-        userRepository.save(anotherUser, UserRole.USER);
-    }
-
-    @Test(expected = UserWithSuchEmailAlreadyExistsException.class)
-    public void testSaveUserWithSameEmail(){
-        UserDTO userDTOToSave = createSimpleUserDTO("User1","em@gmail.com");
-        User savedUser = userRepository.save(userDTOToSave, UserRole.USER);
-
-        UserDTO anotherUser = createSimpleUserDTO("User2","em@gmail.com");
-        userRepository.save(anotherUser, UserRole.USER);
-    }
 
     @Test
     public void findUserById(){
@@ -97,9 +71,9 @@ public class UserRepositoryTest {
 
         assertEquals(user2, user2Saved);
 
-        User user2ById = userRepository.getUserById(user2.getId());
+        User user2ById = userRepository.findUserById(user2.getId());
         assertEquals(user2ById,user2);
-        assertNull(userRepository.getUserById("55fcdcd"));
+        assertNull(userRepository.findUserById("55fcdcd"));
     }
 
     @Test
@@ -115,9 +89,9 @@ public class UserRepositoryTest {
         assertEquals(user2.getEmail(), user2Saved.getEmail());
         assertEquals(user2.getUsername(), user2Saved.getUsername());
 
-        User user2ByUsername = userRepository.getUserByUsername(user2.getUsername());
+        User user2ByUsername = userRepository.findUserByUsername(user2.getUsername());
         assertEquals(user2ByUsername,user2Saved);
-        assertNull(userRepository.getUserByUsername("not existed"));
+        assertNull(userRepository.findUserByUsername("not existed"));
 
     }
 
@@ -134,9 +108,9 @@ public class UserRepositoryTest {
         assertEquals(user2.getEmail(), user2Saved.getEmail());
         assertEquals(user2.getUsername(), user2Saved.getUsername());
 
-        User user2ByEmail = userRepository.getUserByEmail(user2.getEmail());
+        User user2ByEmail = userRepository.findUserByEmail(user2.getEmail());
         assertEquals(user2ByEmail,user2Saved);
 
-        assertNull(userRepository.getUserByEmail("not existed"));
+        assertNull(userRepository.findUserByEmail("not existed"));
     }
 }

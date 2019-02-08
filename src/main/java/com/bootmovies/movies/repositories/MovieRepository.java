@@ -3,6 +3,7 @@ package com.bootmovies.movies.repositories;
 
 import com.bootmovies.movies.domain.movie.Movie;
 //import org.bson.types.ObjectId;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -46,6 +47,6 @@ public interface MovieRepository extends MongoRepository<Movie, String>, PagingA
 
     List<Movie> findMoviesByMetacriticIsNotNull(Pageable page);
 
-    @Cacheable(key="#result.id")
+    @CachePut(key="#result.id")
     Movie save(Movie movie);
 }

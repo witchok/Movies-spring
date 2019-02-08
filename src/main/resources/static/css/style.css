@@ -160,6 +160,12 @@ ul.nav li.dropdown:hover ul.dropdown-menu { display: block; }
     margin-right: 20%;
 }
 
+.register-form-container{
+    padding-left: 35%;
+    padding-right: 35%;
+    padding-top: 10px;
+}
+
 .form-error{
     color: red;
     background: rgba(221,155,199,0.77);

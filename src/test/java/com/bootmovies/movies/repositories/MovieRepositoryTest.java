@@ -26,7 +26,7 @@ import static org.junit.Assert.assertFalse;
 import static com.bootmovies.movies.MoviesCreator.*;
 
 
-@ActiveProfiles("test")
+@ActiveProfiles("integrating-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes =   {EmbeddedMongoConfig.class})
 public class MovieRepositoryTest {

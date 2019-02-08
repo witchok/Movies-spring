@@ -1,8 +1,11 @@
 package com.bootmovies.movies.controllers;
 
+import com.bootmovies.movies.config.WebSecurityConfig;
 import com.bootmovies.movies.repositories.MovieRepository;
 
 import org.hamcrest.Matchers;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -12,23 +15,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
 import java.util.Arrays;
 
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 import static com.bootmovies.movies.MoviesCreator.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(MovieController.class)
+@WebMvcTest(value = MovieController.class, secure = false)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MovieControllerTest {
+//    @Autowired
+//    private WebApplicationContext context;
+
     @MockBean
     private MovieRepository movieRepository;
 
     @Autowired
     private MockMvc mockMvc;
+
+//    @Before
+//    public void setup(){
+//        mockMvc = MockMvcBuilders
+//                    .webAppContextSetup(context)
+//                    .apply(springSecurity())
+//                    .build();
+//    }
 
     @Test
     public void testMovieProfileById() throws Exception {

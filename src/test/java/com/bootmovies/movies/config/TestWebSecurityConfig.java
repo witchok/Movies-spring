@@ -12,7 +12,7 @@
 //@EnableWebSecurity
 ////@ComponentScan(basePackages = "com.bootmovies.movies",
 ////        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebSecurityConfig.class)})
-////@EnableMongoRepositories("com.bootmovies.movies.repositories")
+////@EnableMongoRepositories("com.bootmovies.movies.data")
 //public class TestWebSecurityConfig extends MovieAbstractWebSecurityConfig {
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {

@@ -1,10 +1,12 @@
 package com.bootmovies.movies;
 
+import com.bootmovies.movies.domain.movie.Comment;
 import com.bootmovies.movies.domain.movie.IMDB;
 import com.bootmovies.movies.domain.movie.Movie;
 import com.bootmovies.movies.domain.movie.Tomato;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class MoviesCreator {
@@ -55,7 +57,11 @@ public abstract class MoviesCreator {
 
     public static Movie createSimpleMovieWithImdbRating(String name, double rating){
         Movie movie = createSimpleMovie(name);
-        movie.setImdb(new IMDB("t1234",rating,1234));
+        IMDB imdb = new IMDB();
+        imdb.setId("t1234");
+        imdb.setRating(rating);
+        imdb.setVotes(1234);
+        movie.setImdb(imdb);
         return movie;
     }
 
@@ -77,6 +83,12 @@ public abstract class MoviesCreator {
     public static Movie createSimpleMovieWithYear(String name, int year){
         Movie movie = createSimpleMovie(name);
         movie.setYear(year);
+        return movie;
+    }
+
+    public static Movie createSimpleMovieWithComments(String name, Comment... comments){
+        Movie movie = createSimpleMovie(name);
+        movie.setComments(Arrays.asList(comments));
         return movie;
     }
 }

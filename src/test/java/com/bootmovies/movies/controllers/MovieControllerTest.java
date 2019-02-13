@@ -1,29 +1,27 @@
 package com.bootmovies.movies.controllers;
 
-import com.bootmovies.movies.config.WebSecurityConfig;
-import com.bootmovies.movies.repositories.MovieRepository;
+import com.bootmovies.movies.data.comment.CommentService;
+import com.bootmovies.movies.data.movie.MovieRepository;
 
+import com.bootmovies.movies.domain.movie.Comment;
+import com.bootmovies.movies.domain.movie.Movie;
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
@@ -39,6 +37,9 @@ public class MovieControllerTest {
 
     @MockBean
     private MovieRepository movieRepository;
+
+    @MockBean
+    private CommentService commentService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -71,7 +72,9 @@ public class MovieControllerTest {
 
         mockMvc.perform(get("/movies/5bc640f898b2ea7bc57e19e2"))
                 .andExpect(status().isNotFound())
-                .andExpect(view().name("errors/movieNotFound"));
+                .andExpect(view().name("errors/errorPage"))
+                .andExpect(model().attribute(MovieController.MODEL_ERROR_MESSAGE,
+                        Matchers.equalTo(MovieController.MESSAGE_MOVIE_NOT_FOUND)));
     }
 
     @Test
@@ -170,6 +173,18 @@ public class MovieControllerTest {
                 .andExpect(model().attribute("moviesByProperty", hasSize(3)))
                 .andExpect(model().attribute("messageProper",Matchers.equalTo("Movies found for request: mov")))
                 .andExpect(view().name("moviesByProperty"));
+    }
+
+    @Test
+    public void shouldPostComment() throws Exception {
+        String movieId = "id123";
+        Comment comment = new Comment("user1", "message", new Date());
+//        when(commentService.saveComment(movieId,comment))
+//                .thenReturn(new Movie());
+        mockMvc.perform(post("/movies/"+movieId)
+                .param("message", comment.getMessage()))
+            .andExpect(status().isOk())
+            .andExpect(view().name("movieProfile"));
     }
 
 //

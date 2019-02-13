@@ -1,4 +1,4 @@
-package com.bootmovies.movies.repositories;
+package com.bootmovies.movies.data.movie;
 
 
 import com.bootmovies.movies.domain.movie.Movie;
@@ -14,11 +14,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@Cacheable(value = "movieCache")
+//@Cacheable(value = "movieCache")
 public interface MovieRepository extends MongoRepository<Movie, String>, PagingAndSortingRepository<Movie, String> {
     List<Movie> findMoviesByYearGreaterThan(int year, Pageable page);
 
-//    @Cacheable(key="#id")
+    List<Movie> findMoviesByYearGreaterThanAndPosterUrlIsNotNull(int year, Pageable page);
+
+    //    @Cacheable(key="#id")
     Movie findMovieById(String id);
 
 //    @Cacheable(key="#result.id")
@@ -47,6 +49,6 @@ public interface MovieRepository extends MongoRepository<Movie, String>, PagingA
 
     List<Movie> findMoviesByMetacriticIsNotNull(Pageable page);
 
-    @CachePut(key="#result.id")
+//    @CachePut(key="#result.id")
     Movie save(Movie movie);
 }

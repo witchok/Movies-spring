@@ -24,9 +24,9 @@
                             <span th:text="#{movies.ratings}">Ratings</span>
                         </a>
                         <div id="dropdown-nav" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" th:href="@{/movies/rating/imdb}" th:text="#{movies.ratings.imdb}">IMDB</a>
-                            <a class="dropdown-item" th:href="@{/movies/rating/tomato}" th:text="#{movies.ratings.tomato}">Tomato</a>
-                            <a class="dropdown-item" th:href="@{/movies/rating/metacritic}" th:text="#{movies.ratings.metacritic}">MetaCritic</a>
+                            <a class="dropdown-item" th:href="@{/movies/rating/imdb(number=100)}" th:text="#{movies.ratings.imdb}">IMDB</a>
+                            <a class="dropdown-item" th:href="@{/movies/rating/tomato(number=100)}" th:text="#{movies.ratings.tomato}">Tomato</a>
+                            <a class="dropdown-item" th:href="@{/movies/rating/metacritic(number=100)}" th:text="#{movies.ratings.metacritic}">MetaCritic</a>
                             <!--<div class="dropdown-divider"></div>-->
                             <!--<a class="dropdown-item" href="#">Something else here</a>-->
                         </div>
@@ -36,17 +36,20 @@
                     <!--</li>-->
                 </ul>
                 <div sec:authorize="isAuthenticated()">
-                    <a th:href="@{/user/}">
-                        <span sec:authentication="name">someone</span>
-                    </a>
-                        <!--<form action="#" th:action="@{/logout}" method="post">-->
-                        <!--<input  type="submit" th:value="#{logout}" value="Sign Out"/>-->
-                    <!--</form>-->
-                    <a class="navbar-brand" th:href="@{/logout}" th:text="#{logout}">Sign Out</a>
+                    <div class="user-logout">
+                        <a th:href="@{/user/profile(username=${#authentication.getPrincipal().getUsername()})}" class="inline-div">
+                            <span sec:authentication="name">someone</span>
+                            <!--<span th:text="${#authentication.getPrincipal().getUsername()}"></span>-->
+                        </a>
+                        <form action="#" th:action="@{/logout}" method="post" class="inline-div padding-right">
+                            <input  type="submit" th:value="#{logout}" value="Sign Out"/>
+                        </form>
+                    </div>
+                    <!--<a class="navbar-brand" th:href="@{/logout}" th:text="#{logout}">Sign Out</a>-->
                 </div>
 
                 <div sec:authorize="!isAuthenticated()">
-                    <a class="navbar-brand" th:href="@{/user/login}" th:text="#{login}">Sign In</a>
+                    <a class="navbar-brand" th:href="@{/login}" th:text="#{login}">Sign In</a>
                 </div>
 
                 <div sec:authorize="!isAuthenticated()">
@@ -56,7 +59,6 @@
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" th:name="reg">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit" th:value="#{search}">Search</button>
                 </form>
-
             </div>
         </nav>
     </div>

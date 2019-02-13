@@ -1,23 +1,15 @@
 package com.bootmovies.movies.config;
 
-import com.bootmovies.movies.domain.enums.UserRole;
-import com.bootmovies.movies.repositories.user.MovieUserDetailsService;
-import com.bootmovies.movies.repositories.user.UserRepository;
+import com.bootmovies.movies.data.user.MovieUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 
@@ -31,11 +23,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MovieUserDetailsService userDetailsService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .formLogin()
                     .loginPage("/login")
+                    .defaultSuccessUrl("/")
+//                    .failureUrl("/login?error=true")
                 .and()
                 .rememberMe()
                     .tokenRepository(new InMemoryTokenRepositoryImpl())
@@ -43,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .key(REMEMBER_KEY)
                 .and()
                 .logout()
-                    .logoutSuccessUrl("/")
+                    .logoutSuccessUrl("/login")
                 .and()
                     .authorizeRequests()
                     .anyRequest().permitAll();
@@ -64,14 +61,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
         authenticationProvider.setUserDetailsService(userDetailsService);
         return authenticationProvider;
     }

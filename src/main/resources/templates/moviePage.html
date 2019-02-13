@@ -1,5 +1,6 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Movies</title>
@@ -20,12 +21,14 @@
             <div class="inline-div">
                 <img th:src="${movie.posterUrl}"/>
             </div>
-            <div class="inline-div movieInfo">
+            <div class="inline-div info-margin">
                 <span>Year: </span><span th:text="${movie.year}">year</span><br/>
                 <span>Rated: </span></span> <span th:text="${movie.rated}">rated</span><br/>
-                <span>Runtime: </span> <span th:text="${movie.runtime}">runtime</span><br/>
+                <div th:if="${movie.runtime}">
+                    <span>Runtime: </span> <span th:text="${movie.runtime}">runtime</span>
+                </div>
 
-                <div>
+                <div th:if="${movie.countries}">
                     <span>Countries: </span>
                     <div th:each="country, iter : ${movie.countries}" class="inline-div">
                         <a th:href="@{'/movies/sameCountry/'+${country}}">
@@ -34,7 +37,7 @@
                         <span th:if="${iter.index != (#lists.size(movie.countries)-1)}" >, </span>
                     </div>
                 </div>
-                <div>
+                <div th:if="${movie.genres}">
                     <span>Genres: </span>
                     <div th:each="genre,iter : ${movie.genres}" class="inline-div">
                         <a th:href="@{'/movies/sameGenre/'+${genre}}">
@@ -43,13 +46,13 @@
                         <span th:if="${iter.index != (#lists.size(movie.genres)-1)}" >, </span>
                     </div>
                 </div>
-                <div>
+                <div th:if="${movie.director}">
                     <span>Director: </span>
                     <a th:href="@{'/movies/sameDirector/'+${movie.director}}">
                         <span th:text="${movie.director}"></span>
                     </a>
                 </div>
-                <div>
+                <div th:if="${movie.writers}">
                     <span>Writers: </span>
                     <div th:each="writer,iter : ${movie.writers}" class="inline-div">
                         <a th:href="@{'/movies/sameWriter/'+${writer}}">
@@ -58,7 +61,7 @@
                         <span th:if="${iter.index != (#lists.size(movie.writers)-1)}" >, </span>
                     </div>
                 </div>
-                <div>
+                <div th:if="${movie.actors}">
                     <span>Actors: </span>
                     <div th:each="actor,iter : ${movie.actors}" class="inline-div">
                         <a th:href="@{'/movies/sameActor/'+${actor}}">
@@ -67,10 +70,10 @@
                         <span th:if="${iter.index != (#lists.size(movie.actors)-1)}" >, </span>
                     </div>
                 </div>
-                <div>
+                <div th:if="${movie.metacritic}">
                     <span>Metacritic: </span> <span th:text="${movie.metacritic}"></span>
                 </div>
-                <div th:if="${movie.imdb}">
+                <div th:if="${movie.imdb} and ${movie.imdb.rating}">
                     <span>IMDB: </span> <span th:text="${movie.imdb.rating}"></span>
                 </div>
                 <div th:if="${movie.tomato}">
@@ -80,7 +83,45 @@
         </div>
         <h1>Plot</h1>
         <span th:text="${movie.plot}"></span><br/>
+        <div class="comment-container" >
+            <h3 th:text="#{comments.header}">Comments</h3>
+            <div sec:authorize="isAuthenticated()">
+                <form action="#" th:action="@{'/movies/'+${movie.id}}" th:object="${formComment}" method="post">
+                    <!--<h3 th:text="#{comment.form.write}">Leave your comment</h3>-->
+                    <ul th:if="${#fields.hasErrors('*')}" class="form-error">
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}" >Input is incorrect</li>
+                    </ul>
+                    <!--<div class="form-group">-->
+                        <!--<input th:field="*{message}" class="form-control input-comment">-->
+                        <!--<p th:each="error : ${#fields.errors('username')}" th:text="${error}">Validation error</p>-->
+                    <!--</div>-->
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span th:text="#{comment.form.write}" class="input-group-text">With textarea</span>
+                        </div>
+                        <textarea th:field="*{message}" class="form-control" aria-label="With textarea" />
+                    </div>
 
+                    <button type="submit" class="btn btn-primary" th:text="#{comment.button}">submit</button>
+                </form>
+            </div>
+            <div th:if="${movie.comments ne null and #lists.size(movie.comments) ne 0}">
+                <div class="comment-element" th:each="comment : ${movie.comments}">
+                    <div class="comment-username">
+                        <span th:text="${comment.username}"></span>
+                    </div>
+                    <div >
+                        <img th:src="@{/images/default_profile_image.png}" class="comment-img"/>
+                    </div>
+                    <div class="comment-date">
+                        <span th:text="${comment.creationDate}" ></span>
+                    </div>
+                    <div class="comment-message">
+                        <span th:text="${comment.message}" class="comment-message-text"/>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div th:include="base :: copy" class="copyright"></div>
 

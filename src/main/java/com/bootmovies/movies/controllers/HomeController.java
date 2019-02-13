@@ -1,6 +1,6 @@
 package com.bootmovies.movies.controllers;
 
-import com.bootmovies.movies.repositories.MovieRepository;
+import com.bootmovies.movies.data.movie.MovieRepository;
 import com.bootmovies.movies.domain.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("/")
 public class HomeController {
     private final static Logger logger = LoggerFactory.getLogger(HomeController.class);
-    public static final int YEAR = 2000;
+    public static final int YEAR = 2010;
     @Autowired
     private MovieRepository movieRepository;
 
@@ -28,7 +28,7 @@ public class HomeController {
     public String homePage(Model model){
         //List<Movie> recentMovies = movieRepository.findMoviesByYearGreaterThan(2000);
         Pageable page = PageRequest.of(0,4, new Sort(Sort.Direction.DESC, "year"));
-        List<Movie> recentMovies = movieRepository.findMoviesByYearGreaterThan(YEAR, page);
+        List<Movie> recentMovies = movieRepository.findMoviesByYearGreaterThanAndPosterUrlIsNotNull(YEAR, page);
         logger.info("Len of newest movies: {}",recentMovies.size());
         model.addAttribute("recentMovies",recentMovies);
         return "home";

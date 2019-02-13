@@ -1,19 +1,18 @@
 package com.bootmovies.movies.config;
 
+import com.bootmovies.movies.data.user.UserServiceImpl;
 import cz.jirutka.spring.embedmongo.EmbeddedMongoFactoryBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.io.IOException;
 
-//@Primary
+@Primary
 @Profile("integrating-test")
-@EnableMongoRepositories("com.bootmovies.movies.repositories")
-@ComponentScan("com.bootmovies.movies.repositories")
+@EnableMongoRepositories("com.bootmovies.movies.data")
+@ComponentScan(basePackages="com.bootmovies.movies.data",basePackageClasses = PasswordEncoderConfig.class,
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = MvcConfig.class)})
 public class EmbeddedMongoConfig {
 
     public static final String IP = "localhost";
@@ -31,4 +30,6 @@ public class EmbeddedMongoConfig {
     public MongoTemplate mongoTemplate(EmbeddedMongoFactoryBean mongo) throws IOException {
         return new MongoTemplate(mongo.getObject(), "test");
     }
+
+
 }

@@ -1,6 +1,9 @@
 package com.bootmovies.movies.controllers;
 
-import com.bootmovies.movies.repositories.MovieRepository;
+import com.bootmovies.movies.data.comment.CommentService;
+import com.bootmovies.movies.data.movie.MovieRepository;
+import com.bootmovies.movies.domain.movie.Comment;
+import com.bootmovies.movies.domain.movie.CommentDTO;
 import com.bootmovies.movies.domain.movie.Movie;
 import com.bootmovies.movies.exceptions.MovieNotFoundException;
 import org.slf4j.Logger;
@@ -9,20 +12,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/movies")
 public class MovieController {
     private static final Logger log = LoggerFactory.getLogger(MovieController.class);
+    public static final String MODEL_ERROR_MESSAGE = "errorMessage";
+    public static final String MESSAGE_MOVIE_NOT_FOUND = "Sorry, but movie you requested isn't found ):";
+    public static final String MODEL_FORM_COMMENT="formComment";
 
     @Autowired
     private MovieRepository repo;
 
+    @Autowired
+    private CommentService commentService;
 
 //    @RequestMapping (value = "/{title}", method=GET)
 //    public String movieProfile(@PathVariable("title") String title,
@@ -43,6 +56,7 @@ public class MovieController {
         }
         log.info(movie == null ? "Movie is null" : "Movie is not null");
         model.addAttribute("movie", movie);
+        model.addAttribute(MODEL_FORM_COMMENT,new CommentDTO());
         return "moviePage";
     }
 
@@ -116,9 +130,33 @@ public class MovieController {
         return "moviesByProperty";
     }
 
+    @RequestMapping(value = "/{id}", method = POST)
+    public String processCommentSaving(
+            @PathVariable("id") String movieId,
+            @ModelAttribute("formComment") @Valid CommentDTO commentDTO,
+            Errors errors,
+            Principal principal){
+        log.info("Trying to save comment with message '{}'",commentDTO.getMessage());
+        if(!errors.hasErrors()) {
+            log.info("There is no form errors");
+            String username = principal.getName();
+            log.info("Comment's author is {}",username);
+            Comment commentToSave = convertToComment(commentDTO,principal.getName());
+            commentService.saveComment(movieId, commentToSave);
+            log.info("Comment saved to db");
+        }
+        return "redirect:/movies/"+movieId;
+    }
+
+
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(MovieNotFoundException.class)
-    public String movieNotFoundHandle(){
-        return "errors/movieNotFound";
+    public String movieNotFoundHandle(Model model) {
+        model.addAttribute(MODEL_ERROR_MESSAGE, MESSAGE_MOVIE_NOT_FOUND);
+        return "errors/errorPage";
+    }
+
+    private static Comment convertToComment(CommentDTO commentDTO, String username){
+        return new Comment(username,commentDTO.getMessage(),new Date());
     }
 }

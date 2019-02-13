@@ -1,4 +1,4 @@
-package com.bootmovies.movies.repositories.user;
+package com.bootmovies.movies.data.user;
 
 import com.bootmovies.movies.domain.enums.UserRole;
 import com.bootmovies.movies.domain.user.User;

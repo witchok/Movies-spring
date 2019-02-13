@@ -7,15 +7,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class IMDB {
     @Id
     private String id;
-    private double rating;
-    private int votes;
+    private Double rating;
+    private Integer votes;
 
+//    public IMDB(String id, Double rating, Integer votes) {
+//        this.id = id;
+//        this.rating = rating;
+//        this.votes = votes;
+//    }
 
-    public IMDB(String id, double rating, int votes) {
-        this.id = id;
-        this.rating = rating;
-        this.votes = votes;
-    }
 
     public String getId() {
         return id;
@@ -25,19 +25,19 @@ public class IMDB {
         this.id = id;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
-    public int getVotes() {
+    public Integer getVotes() {
         return votes;
     }
 
-    public void setVotes(int votes) {
+    public void setVotes(Integer votes) {
         this.votes = votes;
     }
 }

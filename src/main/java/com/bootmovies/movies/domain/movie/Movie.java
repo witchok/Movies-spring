@@ -12,19 +12,15 @@ import java.util.List;
 //@Setter
 //@NoArgsConstructor
 //@AllArgsConstructor
-@Document(collection = "movies")
+@Document(collection = "movieDetails")
 public class Movie {
     @Id
     private String id;
     private String title;
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     private int year;
     private String rated;
-    private int runtime;
+    private Integer runtime;
     private String director;
     private List<String> countries;
     private List<String> genres;
@@ -35,12 +31,13 @@ public class Movie {
     private String posterUrl;
     private IMDB imdb;
     private Tomato tomato;
-    @Nullable
+//    @Nullable
     private Integer metacritic;
     private Awards awards;
     private String type;
-
-    public Movie(String title, int year, String rated, int runtime, String director, ArrayList<String> countries, ArrayList<String> genres, ArrayList<String> writers, ArrayList<String> actors, String plot, String posterUrl, IMDB imdb, Tomato tomato, Integer metacritic, Awards awards, String type) {
+    private List<Comment> comments;
+    public Movie(String id, String title, Integer year, String rated, Integer runtime, String director, List<String> countries, List<String> genres, List<String> writers, List<String> actors, String plot, String posterUrl, IMDB imdb, Tomato tomato, @Nullable Integer metacritic, Awards awards, String type, List<Comment> comments) {
+        this.id = id;
         this.title = title;
         this.year = year;
         this.rated = rated;
@@ -57,9 +54,23 @@ public class Movie {
         this.metacritic = metacritic;
         this.awards = awards;
         this.type = type;
+        this.comments = comments;
     }
 
 
+    public Movie(String title, Integer year, String rated, Integer runtime, String director, List<String> countries, List<String> genres, List<String> writers, List<String> actors, String plot, String posterUrl, IMDB imdb, Tomato tomato, Integer metacritic, Awards awards, String type, List<Comment> comments) {
+        this(null,title,year,rated,runtime,director,countries,genres,writers,actors,plot,posterUrl
+                ,imdb,tomato,metacritic,awards,type,comments);
+    }
+
+
+
+    public Movie(String title, Integer year, String rated, Integer runtime, String director, List<String> countries, List<String> genres, List<String> writers, List<String> actors, String plot, String posterUrl, IMDB imdb, Tomato tomato, Integer metacritic, Awards awards, String type) {
+        this(title,year,rated,runtime,director,countries,genres,writers,actors,plot,posterUrl
+                ,imdb,tomato,metacritic,awards,type,null);
+    }
+
+    public Movie(){}
     public int getYear() {
         return year;
     }
@@ -76,11 +87,11 @@ public class Movie {
         this.rated = rated;
     }
 
-    public int getRuntime() {
+    public Integer getRuntime() {
         return runtime;
     }
 
-    public void setRuntime(int runtime) {
+    public void setRuntime(Integer runtime) {
         this.runtime = runtime;
     }
 
@@ -176,6 +187,10 @@ public class Movie {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -190,5 +205,17 @@ public class Movie {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setMetacritic(Integer metacritic) {
+        this.metacritic = metacritic;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

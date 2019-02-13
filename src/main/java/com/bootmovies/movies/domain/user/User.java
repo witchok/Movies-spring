@@ -85,4 +85,12 @@ public class User {
     public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }

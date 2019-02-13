@@ -1,25 +1,22 @@
 package com.bootmovies.movies.controllers;
 
 import com.bootmovies.movies.domain.enums.UserRole;
+import com.bootmovies.movies.domain.user.User;
 import com.bootmovies.movies.domain.user.UserDTO;
 import com.bootmovies.movies.exceptions.UserAlreadyExistsException;
+import com.bootmovies.movies.exceptions.UserNotFoundException;
 import com.bootmovies.movies.exceptions.UserWithSuchEmailAlreadyExistsException;
-import com.bootmovies.movies.repositories.user.UserRepository;
-import com.bootmovies.movies.repositories.user.UserService;
-import com.bootmovies.movies.repositories.user.UserServiceImpl;
+import com.bootmovies.movies.data.user.UserRepository;
+import com.bootmovies.movies.data.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -30,10 +27,16 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/user")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    public static final String MODEL_ERROR_USER_NOT_FOUND="errorUser";
+
+    public static final String MODEL_ERROR_MESSAGE = "errorMessage";
+    public static final String MESSAGE_USER_NOT_FOUND = "Sorry, but user you requested isn't found ):";
 
     public static final String USER_ALREADY_EXISTS_ERROR = "User with this username already exists";
     public static final String USER_WITH_EMAIL_ALREADY_EXISTS_ERROR = "User with such email already exists";
-
+    public static final String USER_WITH_USERNAME_NOT_FOUND = "User with name '%s' not found";
+    public static final String MODEL_USER_FOR_REGISTRATION="user";
+    public static final String MODEL_USER_FOR_PROFILE="detailUser";
 
     @Autowired
     private UserService userService;
@@ -41,10 +44,31 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+//    @RequestMapping(value = "/login", method = GET)
+//    public String login(Model model){
+//        model.addAttribute("authenticatedUser",)
+//        return "login";
+//    }
+
+    @RequestMapping(value = "/profile", method = GET)
+    public String userProfile(
+            @RequestParam("username") String username,
+            Model model){
+        log.info("userProfile method");
+        User user = userRepository.findUserByUsername(username);
+        if (user == null){
+            log.info("User with name '{}' not found",username);
+            throw new UserNotFoundException(String.format(USER_WITH_USERNAME_NOT_FOUND,username));
+        }
+        model.addAttribute(MODEL_USER_FOR_PROFILE,user);
+    log.info("User with name '{}' was found",username);
+        return "userProfile";
+    }
+
     @RequestMapping(value = "/register", method = GET)
     public String showRegistrationForm(Model model){
         log.info("Show registration form method");
-        model.addAttribute("user", new UserDTO());
+        model.addAttribute(MODEL_USER_FOR_REGISTRATION, new UserDTO());
         return "registrationForm";
     }
 
@@ -56,12 +80,10 @@ public class UserController {
         log.info("Trying to registerNewAccount user: {}",userDTO.getUsername());
         if(!errors.hasErrors()) {
             log.info("No form errors found");
-            userService.registerNewAccount(userDTO, UserRole.USER);
-            log.info("Number of users in db: {}",userRepository.count());
-
-            //TODO: why user null?
-            log.info("Find user with this username: {}",userRepository.findUserByUsername(userDTO.getUsername()));
-            return "redirect:/user/login";
+            User user = userService.registerNewAccount(userDTO, UserRole.USER);
+            log.info("Number of user in db: {}",userRepository.count());
+//            log.info("New user's id: {}",user.getId());
+            return "redirect:/user/profile?username="+user.getUsername();
         }
         else {
             log.info("Form errors found");
@@ -86,4 +108,19 @@ public class UserController {
         model.addAttribute("user", new UserDTO());
         return "registrationForm";
     }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundException.class)
+    public String userNotFoundExceptionHandler(Model model){
+        log.info("User not found");
+        model.addAttribute(MODEL_ERROR_MESSAGE, MESSAGE_USER_NOT_FOUND);
+        return "errors/errorPage";
+    }
+
+//    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+//    @ExceptionHandler(UsernameNotFoundException.class)
+//    public String usernameNotFoundException(Model model, Exception e){
+//        model.addAttribute(MODEL_ERROR_USER_NOT_FOUND,e.getMessage());
+//        return "login";
+//    }
 }

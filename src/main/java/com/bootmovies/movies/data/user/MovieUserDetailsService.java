@@ -1,6 +1,5 @@
-package com.bootmovies.movies.repositories.user;
+package com.bootmovies.movies.data.user;
 
-import com.bootmovies.movies.domain.enums.UserRole;
 import com.bootmovies.movies.domain.user.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,9 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 

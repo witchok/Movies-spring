@@ -1,8 +1,6 @@
-package com.bootmovies.movies.repositories.user;
+package com.bootmovies.movies.data.user;
 
 import com.bootmovies.movies.domain.user.User;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.bootmovies.movies.repositories.users;
+package com.bootmovies.movies.data.user;
 
 import com.bootmovies.movies.config.EmbeddedMongoConfig;
 import com.bootmovies.movies.domain.enums.UserRole;
@@ -6,8 +6,6 @@ import com.bootmovies.movies.domain.user.User;
 import com.bootmovies.movies.domain.user.UserDTO;
 import com.bootmovies.movies.exceptions.UserAlreadyExistsException;
 import com.bootmovies.movies.exceptions.UserWithSuchEmailAlreadyExistsException;
-import com.bootmovies.movies.repositories.user.UserService;
-import com.bootmovies.movies.repositories.user.UserRepository;
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -26,6 +24,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @ActiveProfiles("integrating-test")
 @RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootTest()
 @ContextConfiguration(classes =   {EmbeddedMongoConfig.class})
 public class UserServiceTest {
     private static MongoDatabase mongoDatabase;

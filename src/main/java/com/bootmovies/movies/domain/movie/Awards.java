@@ -1,23 +1,23 @@
 package com.bootmovies.movies.domain.movie;
 
 public class Awards {
-    private int wins;
-    private int nominations;
+    private Integer wins;
+    private Integer nominations;
     private String text;
 
-    public int getWins() {
+    public Integer getWins() {
         return wins;
     }
 
-    public void setWins(int wins) {
+    public void setWins(Integer wins) {
         this.wins = wins;
     }
 
-    public int getNominations() {
+    public Integer getNominations() {
         return nominations;
     }
 
-    public void setNominations(int nominations) {
+    public void setNominations(Integer nominations) {
         this.nominations = nominations;
     }
 

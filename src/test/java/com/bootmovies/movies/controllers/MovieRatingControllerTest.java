@@ -1,6 +1,6 @@
 package com.bootmovies.movies.controllers;
 
-import com.bootmovies.movies.repositories.MovieRepository;
+import com.bootmovies.movies.data.movie.MovieRepository;
 
 import com.bootmovies.movies.domain.movie.Movie;
 
@@ -19,14 +19,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 import static com.bootmovies.movies.MoviesCreator.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(MovieRatingController.class)
+@WebMvcTest(value = MovieRatingController.class, secure = false)
 public class MovieRatingControllerTest {
     @MockBean
     private MovieRepository movieRepository;
@@ -36,63 +38,80 @@ public class MovieRatingControllerTest {
 
     @Test
     public void testMoviesByImDbRating() throws Exception {
-        Pageable pageable = PageRequest.of(0,5, new Sort(Sort.Direction.DESC, "imdb.rating"));
-        Movie movie1 = createSimpleMovieWithImdbRating("Movie1", 8.4);
-        Movie movie2 = createSimpleMovieWithImdbRating("Movie2", 8.1);
-        Movie movie3 = createSimpleMovieWithImdbRating("Movie3", 7.3);
-        Movie movie4 = createSimpleMovieWithImdbRating("Movie4", 7.2);
-        Movie movie5 = createSimpleMovieWithImdbRating("Movie5", 7.0);
+        int number = 100;
+        Pageable pageable = PageRequest.of(0,number, new Sort(Sort.Direction.DESC, "imdb.rating"));
+        List<Movie> moviesToReturn = createListMovieWithImdb(number);
 
         when(movieRepository.findMoviesByImdbIsNotNull(pageable))
-                .thenReturn(Arrays.asList(movie1, movie2, movie3, movie4, movie5));
+                .thenReturn(moviesToReturn);
 
-        mockMvc.perform(get("/movies/rating/imdb"))
+        mockMvc.perform(get("/movies/rating/imdb?number="+number))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("imdbMovies"))
-                .andExpect(model().attribute("imdbMovies",hasSize(5)))
-                .andExpect(model().attribute("imdbMovies", contains(movie1,movie2,movie3, movie4, movie5)))
+                .andExpect(model().attribute("imdbMovies",hasSize(number)))
+                .andExpect(model().attribute("imdbMovies", equalTo(moviesToReturn)))
                 .andExpect(view().name("ratingPageIMDB"));
     }
 
     @Test
     public void testMoviesByMetacriticRating() throws Exception {
-        Pageable pageable = PageRequest.of(0,5, new Sort(Sort.Direction.DESC, "metacritic"));
-        Movie movie1 = createSimpleMovieWithMetacriticRating("Movie1", 94);
-        Movie movie2 = createSimpleMovieWithMetacriticRating("Movie2", 88);
-        Movie movie3 = createSimpleMovieWithMetacriticRating("Movie3", 73);
-        Movie movie4 = createSimpleMovieWithMetacriticRating("Movie4", 72);
-        Movie movie5 = createSimpleMovieWithMetacriticRating("Movie5", 70);
+        int number = 100;
+        Pageable pageable = PageRequest.of(0,number, new Sort(Sort.Direction.DESC, "metacritic"));
+        List<Movie> moviesToReturn = createListMovieWithTomato(number);
 
         when(movieRepository.findMoviesByMetacriticIsNotNull(pageable))
-                .thenReturn(Arrays.asList(movie1, movie2, movie3,movie4, movie5));
+                .thenReturn(moviesToReturn);
 
-        mockMvc.perform(get("/movies/rating/metacritic"))
+        mockMvc.perform(get("/movies/rating/metacritic?number="+number))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("metacriticMovies"))
-                .andExpect(model().attribute("metacriticMovies",hasSize(5)))
-                .andExpect(model().attribute("metacriticMovies", contains(movie1,movie2,movie3, movie4, movie5)))
+                .andExpect(model().attribute("metacriticMovies",hasSize(number)))
+                .andExpect(model().attribute("metacriticMovies", equalTo(moviesToReturn)))
                 .andExpect(view().name("ratingPageMetacritic"));
     }
 
 
     @Test
     public void testMoviesByTomatoMeter() throws Exception {
-        Pageable pageable = PageRequest.of(0,5, new Sort(Sort.Direction.DESC, "tomato.meter"));
-        Movie movie1 = createSimpleMovieWithTomatoMeter("Movie1", 84);
-        Movie movie2 = createSimpleMovieWithTomatoMeter("Movie2", 82);
-        Movie movie3 = createSimpleMovieWithTomatoMeter("Movie3", 80);
-        Movie movie4 = createSimpleMovieWithTomatoMeter("Movie4", 77);
-        Movie movie5 = createSimpleMovieWithTomatoMeter("Movie5", 73);
+        int number = 100;
+        Pageable pageable = PageRequest.of(0,number, new Sort(Sort.Direction.DESC, "tomato.meter"));
+        List<Movie> moviesToReturn = createListMovieWithTomato(number);
 
         when(movieRepository.findMoviesByTomatoIsNotNull(pageable))
-                .thenReturn(Arrays.asList(movie1, movie2, movie3, movie4, movie5));
+                .thenReturn(moviesToReturn);
 
-        mockMvc.perform(get("/movies/rating/tomato"))
+        mockMvc.perform(get("/movies/rating/tomato?number="+number))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("tomatoMovies"))
-                .andExpect(model().attribute("tomatoMovies",hasSize(5)))
-                .andExpect(model().attribute("tomatoMovies", contains(movie1,movie2,movie3, movie4, movie5)))
+                .andExpect(model().attribute("tomatoMovies",hasSize(number)))
+                .andExpect(model().attribute("tomatoMovies", equalTo(moviesToReturn)))
                 .andExpect(view().name("ratingPageTomato"));
+    }
+
+    private static List<Movie> createListMovie(int n){
+        List<Movie> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(createSimpleMovie("Movie"+i));
+        }
+        return list;
+    }
+
+
+    private static List<Movie> createListMovieWithImdb(int n){
+        List<Movie> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(createSimpleMovieWithImdbRating("Movie"+i,90));
+        }
+        return list;
+    }
+
+
+    private static List<Movie> createListMovieWithTomato(int n){
+        List<Movie> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(createSimpleMovieWithTomatoMeter("Movie"+i,9));
+        }
+        return list;
     }
 
 }

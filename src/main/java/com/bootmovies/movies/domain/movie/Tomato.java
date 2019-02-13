@@ -1,21 +1,20 @@
 package com.bootmovies.movies.domain.movie;
 
 public class Tomato {
-    private int meter;
+    private Integer meter;
     private String image;
-    private double rating;
-    private int reviews;
-    private int fresh;
+    private Double rating;
+    private Integer reviews;
+    private Integer fresh;
     private String consensus;
-    private int userMeter;
-    private int userRating;
-    private int userReviews;
+    private Integer userMeter;
+    private Integer userRating;
 
-    public int getMeter() {
+    public Integer getMeter() {
         return meter;
     }
 
-    public void setMeter(int meter) {
+    public void setMeter(Integer meter) {
         this.meter = meter;
     }
 
@@ -27,27 +26,27 @@ public class Tomato {
         this.image = image;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
-    public int getReviews() {
+    public Integer getReviews() {
         return reviews;
     }
 
-    public void setReviews(int reviews) {
+    public void setReviews(Integer reviews) {
         this.reviews = reviews;
     }
 
-    public int getFresh() {
+    public Integer getFresh() {
         return fresh;
     }
 
-    public void setFresh(int fresh) {
+    public void setFresh(Integer fresh) {
         this.fresh = fresh;
     }
 
@@ -59,29 +58,30 @@ public class Tomato {
         this.consensus = consensus;
     }
 
-    public int getUserMeter() {
+    public Integer getUserMeter() {
         return userMeter;
     }
 
-    public void setUserMeter(int userMeter) {
+    public void setUserMeter(Integer userMeter) {
         this.userMeter = userMeter;
     }
 
-    public int getUserRating() {
+    public Integer getUserRating() {
         return userRating;
     }
 
-    public void setUserRating(int userRating) {
+    public void setUserRating(Integer userRating) {
         this.userRating = userRating;
     }
 
-    public int getUserReviews() {
+    public Integer getUserReviews() {
         return userReviews;
     }
 
-    public void setUserReviews(int userReviews) {
+    public void setUserReviews(Integer userReviews) {
         this.userReviews = userReviews;
     }
 
+    private Integer userReviews;
 
 }

@@ -82,7 +82,7 @@ public class UserControllerTest {
                     .param("email",userDTO.getEmail())
                     .param("password", userDTO.getPassword())
                     .param("matchingPassword", userDTO.getMatchingPassword()))
-                .andExpect(redirectedUrl("/user/profile?username="+userAfterSave.getUsername()));
+                .andExpect(redirectedUrl("/login"));
         ArgumentCaptor<UserDTO> formObjectArgument = ArgumentCaptor.forClass(UserDTO.class);
         ArgumentCaptor<UserRole> roleArgument = ArgumentCaptor.forClass(UserRole.class);
 
@@ -157,15 +157,16 @@ public class UserControllerTest {
 
     @Test
     public void shouldReturnUserProfile() throws Exception {
-        String searchUsername = "user1";
-        User returnedUser = createSimpleUser(searchUsername,"email@email.com");
-        when(userRepository.findUserByUsername(searchUsername))
+        String id = "user1";
+        String usernmae = "user1";
+        User returnedUser = createSimpleUser(id,usernmae,"email@email.com");
+        when(userRepository.findUserById(id))
                 .thenReturn(returnedUser);
 
-        mockMvc.perform(get("/user/profile?username="+searchUsername))
+        mockMvc.perform(get("/user/profile?id="+id))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute(UserController.MODEL_USER_FOR_PROFILE,
-                        hasProperty("username",Matchers.equalTo(searchUsername))))
+                        hasProperty("username",Matchers.equalTo(usernmae))))
                 .andExpect(model().attribute(UserController.MODEL_USER_FOR_PROFILE,
                         hasProperty("email",Matchers.equalTo(returnedUser.getEmail()))))
                 .andExpect(view().name("userProfile"));
@@ -173,10 +174,10 @@ public class UserControllerTest {
 
     @Test
     public void shouldHandleNotFoundedUser() throws Exception {
-        String username = "user1";
-        when(userRepository.findUserByUsername(username))
+        String id = "1";
+        when(userRepository.findUserById(id))
                 .thenReturn(null);
-        mockMvc.perform(get("/user/profile?username="+username))
+        mockMvc.perform(get("/user/profile?id="+id))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name("errors/errorPage"))
                 .andExpect(model().attribute(UserController.MODEL_ERROR_MESSAGE,

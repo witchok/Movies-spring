@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieProfileDTO {
+    private String id;
     private String title;
     private int year;
     private String rated;
@@ -34,7 +35,8 @@ public class MovieProfileDTO {
 
 
     public MovieProfileDTO(Movie movie, List<CommentShowDTO> commentShowDTOS){
-        this(movie.getTitle(),
+        this(movie.getId(),
+                movie.getTitle(),
                 movie.getYear(),
                 movie.getRated(),
                 movie.getRuntime(),

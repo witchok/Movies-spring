@@ -13,6 +13,7 @@ import com.bootmovies.movies.domain.movie.Movie;
 import com.bootmovies.movies.domain.user.User;
 import com.bootmovies.movies.domain.user.UserDetails;
 import com.bootmovies.movies.exceptions.MovieNotFoundException;
+import com.bootmovies.movies.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,15 +52,7 @@ public class MovieController {
     @Autowired
     private CommentService commentService;
 
-//    @RequestMapping (value = "/{title}", method=GET)
-//    public String movieProfile(@PathVariable("title") String title,
-//            Model model){
-//        log.info("Get movie profile for "+title);
-//        Movie movie = movieRepository.findMovieByTitle(title);
-//        log.info(movie == null ? "Movie is null" : "Movie is not null");
-//        model.addAttribute("movie", movie);
-//        return "moviePage";
-//    }
+
     @RequestMapping (value = "/{id}", method=GET)
     public String movieProfile(@PathVariable("id") String id,
                                Model model){
@@ -70,17 +63,25 @@ public class MovieController {
         }
         log.info(movie == null ? "Movie is null" : "Movie is not null");
         MovieProfileDTO movieProfileDTO;
-
-        List<CommentShowDTO> list = movie.getComments()
-                .parallelStream()
-                .map((e) -> {
-                    User user = userRepository.findUserById(e.getUserId());
-                    UserDTOforComment userDTOforComment = new UserDTOforComment(user.getUsername(), user.getEmail());
-                    return new CommentShowDTO(e.getMessage(), e.getCreationDate(),userDTOforComment); })
-                .collect(Collectors.toList());
-        movieProfileDTO = new MovieProfileDTO(movie, list);
+        List<CommentShowDTO> listComments = null;
+        if(movie.getComments() != null) {
+            listComments = movie.getComments()
+                    .parallelStream()
+                    .map((e) -> {
+                        UserDTOforComment userDTOforComment;
+                        try {
+                            User user = userRepository.findUserById(e.getUserId());
+                            userDTOforComment = new UserDTOforComment(user.getUsername(), user.getEmail());
+                        }catch (UserNotFoundException){
+                            userDTOforComment = new UserDTOforComment("?????","?????");
+                        }
+                        return new CommentShowDTO(e.getMessage(), e.getCreationDate(), userDTOforComment);
+                    })
+                    .collect(Collectors.toList());
+        }
+        movieProfileDTO = new MovieProfileDTO(movie, listComments);
         model.addAttribute("movie", movieProfileDTO);
-//        model.addAttribute(MODEL_FORM_COMMENT,new CommentDTO());
+        model.addAttribute(MODEL_FORM_COMMENT,new CommentDTO());
         return "moviePage";
     }
 
@@ -184,6 +185,6 @@ public class MovieController {
     }
 
     private static Comment convertToComment(CommentDTO commentDTO, String userId){
-        return new Comment(userId, commentDTO.getMessage(), new Date());
+        return new Comment(commentDTO.getMessage(), new Date(), userId);
     }
 }

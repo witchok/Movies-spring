@@ -29,7 +29,7 @@ public class CommentServiceImpl implements CommentService {
         if (movie == null){
             throw new MovieNotFoundException();
         }
-        User user = userRepository.findUserById(commentToSave.getId());
+        User user = userRepository.findUserById(commentToSave.getUserId());
         if (user == null){
             throw new UserNotFoundException();
         }

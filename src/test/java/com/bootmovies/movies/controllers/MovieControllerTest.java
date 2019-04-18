@@ -183,7 +183,7 @@ public class MovieControllerTest {
     @Test
     public void shouldPostComment() throws Exception {
         String movieId = "id123";
-        Comment comment = new Comment("user1", "message", new Date());
+        Comment comment = new Comment("message", new Date(), "user1");
         when(authenticationFacade.getAuthentication().getPrincipal())
                 .thenReturn(new UserDetails("1","user1","password", null));
         when(commentService.saveComment(movieId,comment))

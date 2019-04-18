@@ -16,4 +16,8 @@ public class Comment {
     private Date creationDate;
     private String userId;
 
+    public Comment(String message, Date creationDate, String userId){
+        this(null,message,creationDate,userId);
+    }
+
 }

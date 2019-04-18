@@ -25,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import static com.bootmovies.movies.MoviesCreator.*;
@@ -86,7 +87,7 @@ public class CommentServiceTest {
 
     @Test
     public void shouldSaveComments(){
-        Comment comment1 = new Comment("user1","message", new Date());
+        Comment comment1 = new Comment("message", new Date(), "user1");
 //        Comment comment2 = new Comment("user1","message", new Date());
 //        Comment comment3 = new Comment("user1","message", new Date());
 //

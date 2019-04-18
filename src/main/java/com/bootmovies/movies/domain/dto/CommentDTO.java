@@ -1,4 +1,4 @@
-package com.bootmovies.movies.domain.movie;
+package com.bootmovies.movies.domain.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

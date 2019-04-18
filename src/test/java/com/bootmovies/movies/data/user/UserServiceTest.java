@@ -5,7 +5,7 @@ import com.bootmovies.movies.data.repos.UserRepository;
 import com.bootmovies.movies.data.services.UserService;
 import com.bootmovies.movies.domain.enums.UserRole;
 import com.bootmovies.movies.domain.user.User;
-import com.bootmovies.movies.domain.user.UserDTO;
+import com.bootmovies.movies.domain.dto.UserDTO;
 import com.bootmovies.movies.exceptions.UserAlreadyExistsException;
 import com.bootmovies.movies.exceptions.UserWithSuchEmailAlreadyExistsException;
 import com.mongodb.*;

@@ -2,7 +2,7 @@ package com.bootmovies.movies;
 
 import com.bootmovies.movies.domain.enums.UserRole;
 import com.bootmovies.movies.domain.user.User;
-import com.bootmovies.movies.domain.user.UserDTO;
+import com.bootmovies.movies.domain.dto.UserDTO;
 
 import java.util.Date;
 import java.util.HashSet;

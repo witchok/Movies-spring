@@ -1,11 +1,16 @@
 package com.bootmovies.movies.controllers;
 
 import com.bootmovies.movies.config.IAuthenticationFacade;
+import com.bootmovies.movies.data.repos.UserRepository;
 import com.bootmovies.movies.data.services.CommentService;
 import com.bootmovies.movies.data.repos.MovieRepository;
+import com.bootmovies.movies.domain.dto.CommentShowDTO;
+import com.bootmovies.movies.domain.dto.MovieProfileDTO;
+import com.bootmovies.movies.domain.dto.UserDTOforComment;
 import com.bootmovies.movies.domain.movie.Comment;
-import com.bootmovies.movies.domain.movie.CommentDTO;
+import com.bootmovies.movies.domain.dto.CommentDTO;
 import com.bootmovies.movies.domain.movie.Movie;
+import com.bootmovies.movies.domain.user.User;
 import com.bootmovies.movies.domain.user.UserDetails;
 import com.bootmovies.movies.exceptions.MovieNotFoundException;
 import org.slf4j.Logger;
@@ -19,9 +24,9 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -35,7 +40,10 @@ public class MovieController {
     public static final String MODEL_FORM_COMMENT="formComment";
 
     @Autowired
-    private MovieRepository repo;
+    private MovieRepository movieRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private IAuthenticationFacade authenticationFacade;
@@ -47,7 +55,7 @@ public class MovieController {
 //    public String movieProfile(@PathVariable("title") String title,
 //            Model model){
 //        log.info("Get movie profile for "+title);
-//        Movie movie = repo.findMovieByTitle(title);
+//        Movie movie = movieRepository.findMovieByTitle(title);
 //        log.info(movie == null ? "Movie is null" : "Movie is not null");
 //        model.addAttribute("movie", movie);
 //        return "moviePage";
@@ -56,13 +64,23 @@ public class MovieController {
     public String movieProfile(@PathVariable("id") String id,
                                Model model){
         log.info("Get movie profile for {}", id);
-        Movie movie = repo.findMovieById(id);
+        Movie movie = movieRepository.findMovieById(id);
         if(movie == null){
             throw new MovieNotFoundException();
         }
         log.info(movie == null ? "Movie is null" : "Movie is not null");
-        model.addAttribute("movie", movie);
-        model.addAttribute(MODEL_FORM_COMMENT,new CommentDTO());
+        MovieProfileDTO movieProfileDTO;
+
+        List<CommentShowDTO> list = movie.getComments()
+                .parallelStream()
+                .map((e) -> {
+                    User user = userRepository.findUserById(e.getUserId());
+                    UserDTOforComment userDTOforComment = new UserDTOforComment(user.getUsername(), user.getEmail());
+                    return new CommentShowDTO(e.getMessage(), e.getCreationDate(),userDTOforComment); })
+                .collect(Collectors.toList());
+        movieProfileDTO = new MovieProfileDTO(movie, list);
+        model.addAttribute("movie", movieProfileDTO);
+//        model.addAttribute(MODEL_FORM_COMMENT,new CommentDTO());
         return "moviePage";
     }
 
@@ -70,7 +88,7 @@ public class MovieController {
     public String moviesByCountry(@PathVariable("country") String country,
         Model model) {
         log.info("Get moviesCountry");
-        List<Movie> movies = repo.findMoviesByCountry(country);
+        List<Movie> movies = movieRepository.findMoviesByCountry(country);
         log.info("moviesCountry size: {}", movies.size());
         model.addAttribute("moviesByProperty",movies);
         model.addAttribute("messageProper","Movies filmed in "+country);
@@ -81,7 +99,7 @@ public class MovieController {
     public String moviesByGenre(@PathVariable("genre") String genre,
                                 Model model) {
         log.info("Get moviesGenre");
-        List<Movie> movies = repo.findMoviesByGenre(genre);
+        List<Movie> movies = movieRepository.findMoviesByGenre(genre);
         log.info("moviesGenre size: " + movies.size());
         model.addAttribute("moviesByProperty",movies);
         model.addAttribute("messageProper","Movies with genre: "+genre);
@@ -92,7 +110,7 @@ public class MovieController {
     public String moviesByWriter(@PathVariable("writer") String writer,
                               Model model) {
         log.info("Get moviesWriter");
-        List<Movie> movies = repo.findMoviesByWriter(writer);
+        List<Movie> movies = movieRepository.findMoviesByWriter(writer);
         log.info("moviesWriters size: " + movies.size());
         model.addAttribute("moviesByProperty",movies);
         model.addAttribute("messageProper","Movies with writer: "+writer);
@@ -103,7 +121,7 @@ public class MovieController {
     public String moviesByActor(@PathVariable("actor") String actor,
                               Model model) {
         log.info("Get moviesActor");
-        List<Movie> movies = repo.findMoviesByActor(actor);
+        List<Movie> movies = movieRepository.findMoviesByActor(actor);
         log.info("moviesActor size: " + movies.size());
         model.addAttribute("moviesByProperty",movies);
         model.addAttribute("messageProper","Movies with actor: "+actor);
@@ -114,7 +132,7 @@ public class MovieController {
     public String moviesByDirector(@PathVariable("director") String director,
                               Model model) {
         log.info("Get moviesDirector");
-        List<Movie> movies = repo.findMoviesByDirector(director);
+        List<Movie> movies = movieRepository.findMoviesByDirector(director);
         log.info("moviesDirector size: " + movies.size());
         model.addAttribute("moviesByProperty",movies);
         model.addAttribute("messageProper","Movies filmed by: "+director);
@@ -126,7 +144,7 @@ public class MovieController {
                               Model model){
         if(reg!=null && reg!="") {
             log.info("Get searchMovie");
-            List<Movie> movies = repo.searchForMoviesByTitleRegex(reg);
+            List<Movie> movies = movieRepository.searchForMoviesByTitleRegex(reg);
             log.info("search movies size: " + movies.size());
             model.addAttribute("moviesByProperty", movies);
             model.addAttribute("messageProper", "Movies found for request: " + reg);

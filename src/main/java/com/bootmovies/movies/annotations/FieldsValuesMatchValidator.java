@@ -1,6 +1,5 @@
 package com.bootmovies.movies.annotations;
 
-import com.bootmovies.movies.domain.user.UserDTO;
 import org.springframework.beans.BeanWrapperImpl;
 
 import javax.validation.ConstraintValidator;

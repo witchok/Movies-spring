@@ -1,4 +1,4 @@
-package com.bootmovies.movies.domain.user;
+package com.bootmovies.movies.domain.dto;
 
 import com.bootmovies.movies.annotations.FieldsValuesMatch;
 

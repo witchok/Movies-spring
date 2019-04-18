@@ -72,7 +72,8 @@ public class MovieController {
                         try {
                             User user = userRepository.findUserById(e.getUserId());
                             userDTOforComment = new UserDTOforComment(user.getUsername(), user.getEmail());
-                        }catch (UserNotFoundException){
+                        }catch (UserNotFoundException e1
+                        ){
                             userDTOforComment = new UserDTOforComment("?????","?????");
                         }
                         return new CommentShowDTO(e.getMessage(), e.getCreationDate(), userDTOforComment);

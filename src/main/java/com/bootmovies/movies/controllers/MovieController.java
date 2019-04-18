@@ -1,15 +1,18 @@
 package com.bootmovies.movies.controllers;
 
+import com.bootmovies.movies.config.IAuthenticationFacade;
 import com.bootmovies.movies.data.services.CommentService;
 import com.bootmovies.movies.data.repos.MovieRepository;
 import com.bootmovies.movies.domain.movie.Comment;
 import com.bootmovies.movies.domain.movie.CommentDTO;
 import com.bootmovies.movies.domain.movie.Movie;
+import com.bootmovies.movies.domain.user.UserDetails;
 import com.bootmovies.movies.exceptions.MovieNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -33,6 +36,9 @@ public class MovieController {
 
     @Autowired
     private MovieRepository repo;
+
+    @Autowired
+    private IAuthenticationFacade authenticationFacade;
 
     @Autowired
     private CommentService commentService;
@@ -134,14 +140,17 @@ public class MovieController {
     public String processCommentSaving(
             @PathVariable("id") String movieId,
             @ModelAttribute("formComment") @Valid CommentDTO commentDTO,
-            Errors errors,
-            Principal principal){
+            Errors errors){
         log.info("Trying to save comment with message '{}'",commentDTO.getMessage());
         if(!errors.hasErrors()) {
             log.info("There is no form errors");
-            String username = principal.getName();
-            log.info("Comment's author is {}",username);
-            Comment commentToSave = convertToComment(commentDTO,principal.getName());
+
+            Authentication authentication = authenticationFacade.getAuthentication();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String id = userDetails.getId();
+            String username = userDetails.getUsername();
+            log.info("Comment's author is {} with id {}",username,id);
+            Comment commentToSave = convertToComment(commentDTO, id);
             commentService.saveComment(movieId, commentToSave);
             log.info("Comment saved to db");
         }
@@ -156,7 +165,7 @@ public class MovieController {
         return "errors/errorPage";
     }
 
-    private static Comment convertToComment(CommentDTO commentDTO, String username){
-        return new Comment(username,commentDTO.getMessage(),new Date());
+    private static Comment convertToComment(CommentDTO commentDTO, String userId){
+        return new Comment(userId, commentDTO.getMessage(), new Date());
     }
 }

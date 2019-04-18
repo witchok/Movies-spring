@@ -22,9 +22,9 @@
                 <span th:text="${errorMessage}"></span>
             </div>
             <div class="form-group">
-                <label th:text="#{register.username}">username</label>
+                <label th:text="#{register.id}">id</label>
                 <input th:field="*{username}" class="form-control">
-                <!--<p th:each="error : ${#fields.errors('username')}" th:text="${error}">Validation error</p>-->
+                <!--<p th:each="error : ${#fields.errors('id')}" th:text="${error}">Validation error</p>-->
             </div>
             <div class="form-group">
                 <label th:text="#{register.email}">email</label>
@@ -42,7 +42,7 @@
             </div>
             <button type="submit" class="btn btn-primary" th:text="#{register.submit}">submit</button>
         </form>
-        <a th:href="@{/user/login}" th:text="#{loginLink}">Login</a>
+        <a th:href="@{/login}" th:text="#{loginLink}">Login</a>
     </div>
     <div th:include="base :: copy" class="copyright"></div>
 

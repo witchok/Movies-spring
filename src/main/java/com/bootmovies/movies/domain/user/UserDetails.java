@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public class UserDetails extends User {
     private String id;
-    private UserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
 
@@ -18,10 +18,6 @@ public class UserDetails extends User {
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     @Override

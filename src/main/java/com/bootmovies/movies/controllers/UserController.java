@@ -33,7 +33,7 @@ public class UserController {
 
     public static final String USER_ALREADY_EXISTS_ERROR = "User with this username already exists";
     public static final String USER_WITH_EMAIL_ALREADY_EXISTS_ERROR = "User with such email already exists";
-    public static final String USER_WITH_USERNAME_NOT_FOUND = "User with name '%s' not found";
+    public static final String USER_WITH_ID_NOT_FOUND = "User with id '%s' not found";
     public static final String MODEL_USER_FOR_REGISTRATION="user";
     public static final String MODEL_USER_FOR_PROFILE="detailUser";
 
@@ -51,16 +51,16 @@ public class UserController {
 
     @RequestMapping(value = "/profile", method = GET)
     public String userProfile(
-            @RequestParam("username") String username,
+            @RequestParam("id") String id,
             Model model){
         log.info("userProfile method");
-        User user = userRepository.findUserByUsername(username);
+        User user = userRepository.findUserById(id);
         if (user == null){
-            log.info("User with name '{}' not found",username);
-            throw new UserNotFoundException(String.format(USER_WITH_USERNAME_NOT_FOUND,username));
+            log.info("User with id '{}' not found",id);
+            throw new UserNotFoundException(String.format(USER_WITH_ID_NOT_FOUND,id));
         }
         model.addAttribute(MODEL_USER_FOR_PROFILE,user);
-    log.info("User with name '{}' was found",username);
+        log.info("User with name '{}' was found",id);
         return "userProfile";
     }
 
@@ -82,7 +82,7 @@ public class UserController {
             User user = userService.registerNewAccount(userDTO, UserRole.USER);
             log.info("Number of user in db: {}",userRepository.count());
 //            log.info("New user's id: {}",user.getId());
-            return "redirect:/user/profile?username="+user.getUsername();
+            return "redirect:/login";
         }
         else {
             log.info("Form errors found");

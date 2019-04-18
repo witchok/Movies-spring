@@ -1,9 +1,12 @@
 package com.bootmovies.movies.controllers;
 
+import com.bootmovies.movies.config.IAuthenticationFacade;
 import com.bootmovies.movies.data.services.CommentService;
 import com.bootmovies.movies.data.repos.MovieRepository;
 
 import com.bootmovies.movies.domain.movie.Comment;
+import com.bootmovies.movies.domain.movie.Movie;
+import com.bootmovies.movies.domain.user.UserDetails;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -39,6 +42,9 @@ public class MovieControllerTest {
 
     @MockBean
     private CommentService commentService;
+
+    @MockBean
+    private IAuthenticationFacade authenticationFacade;
 
     @Autowired
     private MockMvc mockMvc;
@@ -178,8 +184,11 @@ public class MovieControllerTest {
     public void shouldPostComment() throws Exception {
         String movieId = "id123";
         Comment comment = new Comment("user1", "message", new Date());
-//        when(commentService.saveComment(movieId,comment))
-//                .thenReturn(new Movie());
+        when(authenticationFacade.getAuthentication().getPrincipal())
+                .thenReturn(new UserDetails("1","user1","password", null));
+        when(commentService.saveComment(movieId,comment))
+                .thenReturn(new Movie());
+
         mockMvc.perform(post("/movies/"+movieId)
                 .param("message", comment.getMessage()))
             .andExpect(status().isOk())

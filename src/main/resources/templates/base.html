@@ -37,9 +37,9 @@
                 </ul>
                 <div sec:authorize="isAuthenticated()">
                     <div class="user-logout">
-                        <a th:href="@{/user/profile(username=${#authentication.getPrincipal().getUsername()})}" class="inline-div">
+                        <a th:href="@{/user/profile(id=${#authentication.getPrincipal().getId()})}" class="inline-div">
                             <span sec:authentication="name">someone</span>
-                            <!--<span th:text="${#authentication.getPrincipal().getUsername()}"></span>-->
+                            <!--<span th:text="${#authentication.getPrincipal().getId()}"></span>-->
                         </a>
                         <form action="#" th:action="@{/logout}" method="post" class="inline-div padding-right">
                             <input  type="submit" th:value="#{logout}" value="Sign Out"/>

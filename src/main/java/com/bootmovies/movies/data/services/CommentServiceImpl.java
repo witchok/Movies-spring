@@ -4,6 +4,7 @@ import com.bootmovies.movies.domain.movie.Comment;
 import com.bootmovies.movies.domain.movie.Movie;
 import com.bootmovies.movies.data.repos.MovieRepository;
 import com.bootmovies.movies.data.repos.UserRepository;
+import com.bootmovies.movies.domain.user.User;
 import com.bootmovies.movies.exceptions.MovieNotFoundException;
 import com.bootmovies.movies.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,26 +26,17 @@ public class CommentServiceImpl implements CommentService {
     public Movie saveComment(String movieId, Comment commentToSave)
             throws UserNotFoundException, MovieNotFoundException {
         Movie movie = movieRepository.findMovieById(movieId);
-//        if (movie == null){
-//            throw new MovieNotFoundException();
-//        }
-//        User user = userRepository.findUserByUsername(commentToSave.getUsername());
-//        if (user == null){
-//            throw new UserNotFoundException();
-//        }
+        if (movie == null){
+            throw new MovieNotFoundException();
+        }
+        User user = userRepository.findUserById(commentToSave.getId());
+        if (user == null){
+            throw new UserNotFoundException();
+        }
         if(movie.getComments() == null){
             movie.setComments(new ArrayList<>());
         }
         movie.getComments().add(commentToSave);
         return movieRepository.save(movie);
     }
-    //    @Override
-//    public Comment deleteComment(Movie movie, String id) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Comment findComment(String movieId, String commentId) {
-//        return null;
-//    }
 }

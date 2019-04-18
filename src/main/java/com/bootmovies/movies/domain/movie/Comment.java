@@ -1,19 +1,15 @@
 package com.bootmovies.movies.domain.movie;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.annotation.Generated;
 import java.util.Date;
 
 public class Comment {
 
-    private String username;
+    private String id;
     private String message;
     private Date creationDate;
 
-    public Comment(String username, String message, Date creationDate) {
-        this.username = username;
+    public Comment(String id, String message, Date creationDate) {
+        this.id = id;
         this.message = message;
         this.creationDate = creationDate;
     }
@@ -21,12 +17,12 @@ public class Comment {
     public Comment(){ }
 
 
-    public String getUsername() {
-        return username;
+    public String getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMessage() {

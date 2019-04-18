@@ -19,7 +19,7 @@
         <h2 th:text="${movie.title}" class="movieTitle">Title</h2>
         <div class="info-and-img-div">
             <div class="inline-div">
-                <img th:src="${movie.posterUrl}"/>
+                <img th:src="${movie.posterUrl}" th:onerror="'this.src=\'' + @{/images/image_not_found.jpg} + '\';'"/>
             </div>
             <div class="inline-div info-margin">
                 <span>Year: </span><span th:text="${movie.year}">year</span><br/>

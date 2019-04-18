@@ -13,9 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -54,25 +53,21 @@ public class UserServiceImpl implements UserService {
 
     private boolean emailExists(String email){
         User user = userRepository.findUserByEmail(email);
-        if(user != null) return true;
-        return false;
+        return user != null;
     }
 
     private boolean userExists(String username){
         User user = userRepository.findUserByUsername(username);
-        if(user != null) return true;
-        return false;
+        return user != null;
     }
 
     private User convertToUser(UserDTO userDTO, UserRole... roles){
-        Set<String> stringRoles = new HashSet<>();
-        for (UserRole role : roles){
-            stringRoles.add(role.toString());
-        }
         return new User(userDTO.getUsername(),
                 passwordEncoder.encode(userDTO.getPassword()),
                 userDTO.getEmail(),
-                stringRoles,
+                Arrays.stream(roles)
+                        .map(role -> role.toString())
+                        .collect(Collectors.toSet()),
                 new Date());
     }
 }

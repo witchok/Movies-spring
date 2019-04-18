@@ -17,11 +17,14 @@
 <div id="header" th:include="base :: header"></div>
 <h2 >Rating Metacritic: </h2>
 <div class="list-group">
-    <div th:each="movie, iter : ${metacriticMovies}" class="list-group-item list-group-item-action flex-column align-items-start ">
+    <div th:each="movie, iter : ${metacriticMovies}"
+         class="list-group-item list-group-item-action flex-column align-items-start ">
         <a th:href="@{'/movies/'+${movie.id}}" class="movie-link">
             <div class="d-flex w-100 justify-content-between">
                 <span th:text="${iter.index}+1"></span>
-                <img th:src="${movie.posterUrl}" class="img-fluid rounded float-left list-img" />
+                <img th:src="${movie.posterUrl}"
+                     th:onerror="'this.src=\'' + @{/images/image_not_found.jpg} + '\';'"
+                     class="img-fluid rounded float-left list-img" />
                 <div  class="top-line-div">
                     <div >
                         <h5 class="mb-1" th:text="${movie.title}">Movie title</h5>

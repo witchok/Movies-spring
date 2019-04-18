@@ -29,7 +29,8 @@
                 <div th:each="movie, iter : ${recentMovies}"  class="carousel-item w-100 dark-background"
                      th:classappend="${iter.index == 1} ? 'active'">
                     <a th:href="@{'/movies/'+${movie.id}}" class="">
-                        <img th:src="${movie.posterUrl}" class="d-block center rounded" />
+                        <img th:src="${movie.posterUrl}" class="d-block center rounded"
+                             th:onerror="'this.src=\'' + @{/images/image_not_found.jpg} + '\';'"/>
                     </a>
                     <div class="carousel-caption d-none d-md-block">
                         <span th:text="${movie.title}" class="title-movie-carousel">title</span>

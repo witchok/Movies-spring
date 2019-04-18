@@ -1,4 +1,4 @@
-package com.bootmovies.movies.data.movie;
+package com.bootmovies.movies.data.repos;
 
 
 import com.bootmovies.movies.domain.movie.Movie;

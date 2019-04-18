@@ -1,6 +1,6 @@
 package com.bootmovies.movies.config;
 
-import com.bootmovies.movies.data.user.MovieUserDetailsService;
+import com.bootmovies.movies.data.services.MovieUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

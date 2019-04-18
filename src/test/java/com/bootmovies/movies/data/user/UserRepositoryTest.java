@@ -2,6 +2,7 @@ package com.bootmovies.movies.data.user;
 
 
 import com.bootmovies.movies.config.EmbeddedMongoConfig;
+import com.bootmovies.movies.data.repos.UserRepository;
 import com.bootmovies.movies.domain.user.User;
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;

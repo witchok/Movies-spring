@@ -2,9 +2,9 @@ package com.bootmovies.movies.data.comment;
 
 
 import com.bootmovies.movies.config.EmbeddedMongoConfig;
-import com.bootmovies.movies.data.movie.MovieRepository;
-import com.bootmovies.movies.data.user.UserRepository;
-import com.bootmovies.movies.data.user.UserService;
+import com.bootmovies.movies.data.repos.MovieRepository;
+import com.bootmovies.movies.data.services.CommentService;
+import com.bootmovies.movies.data.repos.UserRepository;
 import com.bootmovies.movies.domain.movie.Comment;
 import com.bootmovies.movies.domain.movie.Movie;
 import com.bootmovies.movies.domain.user.User;
@@ -12,8 +12,6 @@ import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
@@ -29,7 +27,6 @@ import java.util.Date;
 import static com.bootmovies.movies.MoviesCreator.*;
 import static com.bootmovies.movies.UsersCreator.*;
 
-import static com.bootmovies.movies.UsersCreator.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 

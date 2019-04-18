@@ -1,6 +1,8 @@
 package com.bootmovies.movies.data.user;
 
 import com.bootmovies.movies.config.EmbeddedMongoConfig;
+import com.bootmovies.movies.data.repos.UserRepository;
+import com.bootmovies.movies.data.services.UserService;
 import com.bootmovies.movies.domain.enums.UserRole;
 import com.bootmovies.movies.domain.user.User;
 import com.bootmovies.movies.domain.user.UserDTO;

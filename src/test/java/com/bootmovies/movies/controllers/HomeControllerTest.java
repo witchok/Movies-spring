@@ -1,6 +1,6 @@
 package com.bootmovies.movies.controllers;
 
-import com.bootmovies.movies.data.movie.MovieRepository;
+import com.bootmovies.movies.data.repos.MovieRepository;
 import com.bootmovies.movies.domain.movie.Movie;
 
 import org.junit.Test;

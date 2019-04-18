@@ -1,7 +1,7 @@
 package com.bootmovies.movies.data.movie;
 
 import com.bootmovies.movies.config.EmbeddedMongoConfig;
-import com.bootmovies.movies.data.movie.MovieRepository;
+import com.bootmovies.movies.data.repos.MovieRepository;
 import com.bootmovies.movies.domain.movie.Movie;
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;

@@ -1,10 +1,9 @@
-package com.bootmovies.movies.data.comment;
+package com.bootmovies.movies.data.services;
 
 import com.bootmovies.movies.domain.movie.Comment;
 import com.bootmovies.movies.domain.movie.Movie;
-import com.bootmovies.movies.data.movie.MovieRepository;
-import com.bootmovies.movies.data.user.UserRepository;
-import com.bootmovies.movies.domain.user.User;
+import com.bootmovies.movies.data.repos.MovieRepository;
+import com.bootmovies.movies.data.repos.UserRepository;
 import com.bootmovies.movies.exceptions.MovieNotFoundException;
 import com.bootmovies.movies.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

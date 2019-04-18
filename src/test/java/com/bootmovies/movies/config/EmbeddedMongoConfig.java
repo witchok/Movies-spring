@@ -1,6 +1,5 @@
 package com.bootmovies.movies.config;
 
-import com.bootmovies.movies.data.user.UserServiceImpl;
 import cz.jirutka.spring.embedmongo.EmbeddedMongoFactoryBean;
 import org.springframework.context.annotation.*;
 import org.springframework.data.mongodb.core.MongoTemplate;

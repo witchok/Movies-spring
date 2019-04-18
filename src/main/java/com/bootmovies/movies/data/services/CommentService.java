@@ -1,4 +1,4 @@
-package com.bootmovies.movies.data.comment;
+package com.bootmovies.movies.data.services;
 
 import com.bootmovies.movies.domain.movie.Comment;
 import com.bootmovies.movies.domain.movie.Movie;

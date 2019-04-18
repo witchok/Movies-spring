@@ -1,5 +1,6 @@
-package com.bootmovies.movies.data.user;
+package com.bootmovies.movies.data.services;
 
+import com.bootmovies.movies.data.repos.UserRepository;
 import com.bootmovies.movies.domain.user.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,17 +33,10 @@ public class MovieUserDetailsService implements UserDetailsService {
             log.info("User '{}' not found",username);
             throw new UsernameNotFoundException("User with name " + username + "not found");
         }
-        boolean enabled = true;
-        boolean accountNonExpired = true;
-        boolean credentialsNonExpired = true;
-        boolean accountNotLocked = true;
-        return new org.springframework.security.core.userdetails.User(
+        return new com.bootmovies.movies.domain.user.UserDetails(
+                user.getId(),
                 user.getUsername(),
                 user.getEncodedPassword(),
-                enabled,
-                accountNonExpired,
-                credentialsNonExpired,
-                accountNotLocked,
                 getGrantedAuthorities(user.getRoles()));
     }
 

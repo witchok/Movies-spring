@@ -1,10 +1,9 @@
 package com.bootmovies.movies.controllers;
 
-import com.bootmovies.movies.data.comment.CommentService;
-import com.bootmovies.movies.data.movie.MovieRepository;
+import com.bootmovies.movies.data.services.CommentService;
+import com.bootmovies.movies.data.repos.MovieRepository;
 
 import com.bootmovies.movies.domain.movie.Comment;
-import com.bootmovies.movies.domain.movie.Movie;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 

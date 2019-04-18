@@ -1,4 +1,4 @@
-package com.bootmovies.movies.data.user;
+package com.bootmovies.movies.data.repos;
 
 import com.bootmovies.movies.domain.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;

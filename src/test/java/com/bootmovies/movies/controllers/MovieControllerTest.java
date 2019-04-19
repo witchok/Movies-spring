@@ -41,15 +41,6 @@ public class MovieControllerTest {
     private MovieRepository movieRepository;
 
 
-    @MockBean
-    private UserRepository userRepository;
-
-    @MockBean
-    private CommentService commentService;
-
-    @MockBean
-    private IAuthenticationFacade authenticationFacade;
-
     @Autowired
     private MockMvc mockMvc;
 

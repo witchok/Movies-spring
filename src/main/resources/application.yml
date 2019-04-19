@@ -1,0 +1,29 @@
+# SERVER PROPERTIES
+server:
+  port: 7777
+
+  ## MONGODB (MongoProperties)
+  #spring.data.mongodb.host=localhost
+  #spring.data.mongodb.port=27017
+  #spring.data.mongodb.database=study
+
+  # LOGGING
+logging:
+  level:
+    org:
+      springframework:
+        web: ERROR
+    com:
+      bootmovies:
+        movies:DEBUG
+  #logging.level.web=DEBUG
+  # THYMELEAF
+spring:
+  thymeleaf:
+    cache: false
+
+  #MongoDB cluster
+  data:
+    mongodb:
+      uri: mongodb+srv://m001-student:m001-mongodb-basics@clustertrain-pjssn.mongodb.net/test?retryWrites=true
+      database: video

@@ -61,7 +61,7 @@ public class MovieController {
         if(movie == null){
             throw new MovieNotFoundException();
         }
-        log.info(movie == null ? "Movie is null" : "Movie is not null");
+        log.info("Movie with id {} was found",id);
         MovieProfileDTO movieProfileDTO;
         List<CommentShowDTO> listComments = null;
         if(movie.getComments() != null) {
@@ -174,6 +174,7 @@ public class MovieController {
             log.info("Comment saved to db");
         }
         return "redirect:/movies/"+movieId;
+
     }
 
 

@@ -15,12 +15,12 @@ public class LogControllerMethods {
 
     @Before(value = "controllerMethodsPointcat()", argNames = "joinPoint")
     public void beforeMethodStarted(JoinPoint joinPoint) {
-        log.info("{} :: {} method called",joinPoint.getTarget().getClass().getName(),joinPoint.getSignature().getName());
+        log.info("{} :: {} method called",joinPoint.getTarget().getClass().getName(), joinPoint.getSignature().getName());
     }
 
     @AfterReturning(value = "controllerMethodsPointcat()", returning = "viewName")
     public void afterMethodFinished(JoinPoint joinPoint, Object viewName){
-        log.info("Return from {}:{}",joinPoint.getTarget().getClass().getName(),joinPoint.getSignature().getName());
+        log.info("Return from {}:{}",joinPoint.getTarget().getClass().getName(), joinPoint.getSignature().getName());
         if( viewName != null) {
             log.info("Returned view is {}", viewName.toString());
         }else {

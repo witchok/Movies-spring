@@ -24,7 +24,7 @@ import static com.bootmovies.movies.UsersCreator.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 
-@ActiveProfiles("integrating-test")
+@ActiveProfiles("integrating-controllerMethodsPointcat")
 @RunWith(SpringJUnit4ClassRunner.class)
 //@SpringBootTest()
 @ContextConfiguration(classes =   {EmbeddedMongoConfig.class})
@@ -41,7 +41,7 @@ public class UserServiceTest {
     @BeforeClass
     public static void prepare(){
         MongoClient mongoClient = new MongoClient(new ServerAddress(EmbeddedMongoConfig.IP, EmbeddedMongoConfig.PORT));
-        mongoDatabase = mongoClient.getDatabase("test");
+        mongoDatabase = mongoClient.getDatabase("controllerMethodsPointcat");
         userCollection = mongoDatabase.getCollection("movieUsers");
     }
 

@@ -21,7 +21,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.Assert.*;
 
 
-@ActiveProfiles("integrating-test")
+@ActiveProfiles("integrating-controllerMethodsPointcat")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes =   {EmbeddedMongoConfig.class})
 public class UserRepositoryTest {
@@ -34,7 +34,7 @@ public class UserRepositoryTest {
     @BeforeClass
     public static void prepare(){
         MongoClient mongoClient = new MongoClient(new ServerAddress(EmbeddedMongoConfig.IP, EmbeddedMongoConfig.PORT));
-        mongoDatabase = mongoClient.getDatabase("test");
+        mongoDatabase = mongoClient.getDatabase("controllerMethodsPointcat");
         userCollection = mongoDatabase.getCollection("movieUsers");
     }
 

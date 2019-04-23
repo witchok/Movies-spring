@@ -39,7 +39,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 
 
 
-//@ActiveProfiles("integrating-test")
+//@ActiveProfiles("integrating-controllerMethodsPointcat")
 @RunWith(SpringRunner.class)
 @ComponentScan
 //@ContextConfiguration(classes =   {EmbeddedMongoConfig.class})
@@ -67,7 +67,7 @@ public class CommentServiceTest {
 //    @BeforeClass
 //    public static void prepare(){
 //        MongoClient mongoClient = new MongoClient(new ServerAddress(EmbeddedMongoConfig.IP, EmbeddedMongoConfig.PORT));
-//        mongoDatabase = mongoClient.getDatabase("test");
+//        mongoDatabase = mongoClient.getDatabase("controllerMethodsPointcat");
 //        userCollection = mongoDatabase.getCollection("movieUsers");
 //        movieCollection = mongoDatabase.getCollection("movies");
 //    }

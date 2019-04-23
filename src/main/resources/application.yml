@@ -15,7 +15,7 @@ logging:
         web: ERROR
     com:
       bootmovies:
-        movies:DEBUG
+        movies: DEBUG
   #logging.level.web=DEBUG
   # THYMELEAF
 spring:
@@ -25,5 +25,5 @@ spring:
   #MongoDB cluster
   data:
     mongodb:
-      uri: mongodb+srv://m001-student:m001-mongodb-basics@clustertrain-pjssn.mongodb.net/test?retryWrites=true
+      uri: mongodb+srv://m001-student:m001-mongodb-basics@clustertrain-pjssn.mongodb.net/controllerMethodsPointcat?retryWrites=true
       database: video

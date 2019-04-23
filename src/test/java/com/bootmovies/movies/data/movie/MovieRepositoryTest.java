@@ -27,7 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static com.bootmovies.movies.MoviesCreator.*;
 
 
-@ActiveProfiles("integrating-test")
+@ActiveProfiles("integrating-controllerMethodsPointcat")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes =   {EmbeddedMongoConfig.class})
 public class MovieRepositoryTest {
@@ -42,7 +42,7 @@ public class MovieRepositoryTest {
     @BeforeClass
     public static void prepareDB(){
         MongoClient mongoClient = new MongoClient(new ServerAddress(EmbeddedMongoConfig.IP, EmbeddedMongoConfig.PORT));
-        mongoDatabase = mongoClient.getDatabase("test");
+        mongoDatabase = mongoClient.getDatabase("controllerMethodsPointcat");
         movieCollection = mongoDatabase.getCollection("movies");
     }
 

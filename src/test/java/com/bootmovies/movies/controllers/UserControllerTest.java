@@ -31,7 +31,7 @@ import static com.bootmovies.movies.UsersCreator.*;
 import static org.junit.jupiter.api.Assertions.*;
 //import static org.junit.Assert.*;
 
-//@ActiveProfiles("integrating-test")
+//@ActiveProfiles("integrating-controllerMethodsPointcat")
 @RunWith(SpringRunner.class)
 //@ContextConfiguration(classes = TestWebSecurityConfig.class)
 @WebMvcTest(value = UserController.class, secure = false)

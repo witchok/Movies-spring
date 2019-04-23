@@ -27,7 +27,7 @@ public class EmbeddedMongoConfig {
 
     @Bean
     public MongoTemplate mongoTemplate(EmbeddedMongoFactoryBean mongo) throws IOException {
-        return new MongoTemplate(mongo.getObject(), "test");
+        return new MongoTemplate(mongo.getObject(), "controllerMethodsPointcat");
     }
 
 
